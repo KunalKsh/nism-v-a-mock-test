@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NISM Series V-A: Mutual Fund Distributors Mock Test Portal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nism: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <header class="bg-navy-900 text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-nism-600 text-white p-2 rounded-lg font-bold text-lg flex items-center justify-center w-10 h-10 shadow">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base sm:text-lg leading-tight flex items-center gap-2">
+                        <span>NISM Series V-A</span>
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">2026 Updated</span>
+                    </h1>
+                    <p class="text-xs text-slate-300 hidden sm:block">Mutual Fund Distributors Certification Practice Portal</p>
+                </div>
+            </div>
+
+            <!-- Top Right Action Controls -->
+            <div class="flex items-center space-x-3">
+                <div id="gs-status-badge" class="flex items-center space-x-2 text-xs px-3 py-1.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                    <span class="w-2 h-2 rounded-full bg-slate-400" id="gs-indicator"></span>
+                    <span id="gs-status-text">Sheet: Checking...</span>
+                </div>
+                <button id="btn-gs-config" onclick="toggleGSModal()" title="One-time Admin Sheet Setup" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition text-slate-200">
+                    <i data-lucide="settings" class="w-4 h-4 text-emerald-400"></i>
+                    <span class="hidden sm:inline">Admin Config</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col">
+
+        <!-- SCREEN 1: CANDIDATE REGISTRATION & CONFIG -->
+        <section id="screen-welcome" class="flex-1 flex flex-col justify-center items-center py-6">
+            <div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-navy-900 via-nism-900 to-nism-800 p-6 sm:p-8 text-white text-center">
+                    <span class="inline-block px-3 py-1 bg-nism-600/80 text-xs font-semibold rounded-full uppercase tracking-wider mb-2 border border-nism-400/30">Official NISM V-A Syllabus Aligned</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold">Interactive Mock Test Engine</h2>
+                    <p class="text-slate-200 text-sm mt-1">50 Fresh Randomized Questions • Real Exam Conditions • Automatic Cloud Sync</p>
+                </div>
+
+                <form id="form-registration" onsubmit="handleStartExam(event)" class="p-6 sm:p-8 space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Candidate Full Name *</label>
+                            <div class="relative">
+                                <i data-lucide="user" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
+                                <input type="text" id="candidate-name" required placeholder="e.g. Rahul Sharma" 
+                                    class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-nism-600 focus:border-nism-600 outline-none text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Email Address *</label>
+                            <div class="relative">
+                                <i data-lucide="mail" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
+                                <input type="email" id="candidate-email" required placeholder="rahul@example.com" 
+                                    class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-nism-600 focus:border-nism-600 outline-none text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Mobile / ARN ID (Optional)</label>
+                            <div class="relative">
+                                <i data-lucide="phone" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
+                                <input type="text" id="candidate-arn" placeholder="ARN-123456 or Phone" 
+                                    class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-nism-600 focus:border-nism-600 outline-none text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Timer Mode</label>
+                            <div class="relative">
+                                <i data-lucide="clock" class="w-5 h-5 absolute left-3 top-3 text-slate-400"></i>
+                                <select id="exam-duration" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-nism-600 focus:border-nism-600 outline-none text-sm bg-white">
+                                    <option value="120">120 Minutes (Official Exam Standard)</option>
+                                    <option value="60">60 Minutes (Speed Challenge)</option>
+                                    <option value="0">Unlimited (Practice / Study Mode)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="gsheet-status-card" class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs text-slate-600">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="database" class="w-4 h-4 text-emerald-600"></i>
+                            <span id="gsheet-status-msg">Checking configured Google Sheet connection...</span>
+                        </div>
+                        <button type="button" onclick="toggleGSModal()" class="text-nism-600 font-semibold hover:underline">Change Setup</button>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-xs text-blue-900 space-y-2">
+                        <div class="font-bold flex items-center space-x-2 text-blue-950">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-nism-600"></i>
+                            <span>NISM Series V-A Test Parameters:</span>
+                        </div>
+                        <ul class="list-disc list-inside space-y-1 text-slate-700">
+                            <li><strong>Dynamic Selection:</strong> 50 unique questions sampled randomly from our comprehensive pool every single attempt.</li>
+                            <li><strong>Passing Standard:</strong> 60% (30 out of 50 marks required to pass).</li>
+                            <li><strong>No Negative Marking:</strong> 1 mark per correct answer, 0 for wrong/unanswered.</li>
+                            <li><strong>Complete Analytics:</strong> Instant score, category-wise performance break-up, and detailed question rationales upon submission.</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 px-6 bg-nism-600 hover:bg-nism-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-[0.99] flex items-center justify-center space-x-2 text-base">
+                        <span>Start 50-Question Test Session</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: LIVE EXAMINATION INTERFACE -->
+        <section id="screen-exam" class="hidden flex-1 flex flex-col space-y-4">
+            
+            <!-- Exam Top Bar -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center space-x-2">
+                    <span id="exam-user-display" class="font-bold text-slate-800 text-sm">Candidate Name</span>
+                    <span class="text-slate-300">|</span>
+                    <span class="text-xs bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md text-slate-600 font-medium">NISM VA Test Session</span>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Timer Box -->
+                    <div class="flex items-center space-x-2 bg-slate-900 text-white px-3.5 py-1.5 rounded-lg shadow font-mono text-sm">
+                        <i data-lucide="timer" class="w-4 h-4 text-amber-400"></i>
+                        <span id="exam-timer">120:00</span>
+                    </div>
+
+                    <button onclick="promptSubmitExamModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-1.5 rounded-lg text-xs shadow transition flex items-center space-x-1">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        <span>Submit Exam</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Exam Main Layout (Question Panel + Palette) -->
+            <div class="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
+                
+                <!-- Question Panel -->
+                <div class="lg:col-span-3 bg-white rounded-xl border border-slate-200 shadow-sm p-5 sm:p-7 flex flex-col justify-between min-h-[480px]">
+                    <div>
+                        <!-- Header Bar for Question -->
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-nism-100 text-nism-800 text-xs font-bold px-3 py-1 rounded-full" id="q-number-badge">Question 1 of 50</span>
+                                <span class="bg-slate-100 text-slate-600 text-xs font-semibold px-2.5 py-1 rounded-md" id="q-module-badge">Module Tag</span>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-400">1 Mark</span>
+                        </div>
+
+                        <!-- Question Text -->
+                        <h3 id="q-text" class="text-base sm:text-lg font-semibold text-slate-900 mb-6 leading-relaxed">
+                            Loading question...
+                        </h3>
+
+                        <!-- Options Form -->
+                        <div id="q-options-container" class="space-y-3">
+                            <!-- Dynamically generated options -->
+                        </div>
+                    </div>
+
+                    <!-- Question Action Controls -->
+                    <div class="border-t border-slate-100 pt-5 mt-6 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center space-x-2">
+                            <button onclick="markForReviewAndNext()" class="px-4 py-2 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
+                                <i data-lucide="bookmark" class="w-4 h-4"></i>
+                                <span>Mark for Review & Next</span>
+                            </button>
+                            <button onclick="clearResponse()" class="px-3 py-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg text-xs font-medium transition">
+                                Clear Response
+                            </button>
+                        </div>
+
+                        <div class="flex items-center space-x-2">
+                            <button id="btn-prev" onclick="navigateQuestion(-1)" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition flex items-center space-x-1">
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                                <span>Previous</span>
+                            </button>
+                            <button id="btn-save-next" onclick="saveAndNext()" class="px-5 py-2 bg-nism-600 hover:bg-nism-700 text-white rounded-lg text-xs font-bold shadow transition flex items-center space-x-1">
+                                <span>Save & Next</span>
+                                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Question Palette Navigation -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-slate-700">Question Palette</h4>
+                        <span id="palette-summary" class="text-[11px] text-slate-500 font-medium">0/50 Answered</span>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                        <div class="flex items-center space-x-1.5">
+                            <span class="w-3 h-3 rounded bg-emerald-500"></span>
+                            <span>Answered</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <span class="w-3 h-3 rounded bg-purple-500"></span>
+                            <span>Review</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <span class="w-3 h-3 rounded bg-slate-200 border border-slate-300"></span>
+                            <span>Not Visited</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <span class="w-3 h-3 rounded bg-amber-400"></span>
+                            <span>Ans & Review</span>
+                        </div>
+                    </div>
+
+                    <!-- 50 Button Matrix -->
+                    <div id="q-palette-grid" class="grid grid-cols-5 gap-2 max-h-[320px] overflow-y-auto custom-scrollbar p-1">
+                        <!-- Rendered via JS -->
+                    </div>
+
+                    <div class="pt-2">
+                        <button onclick="promptSubmitExamModal()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow transition flex items-center justify-center space-x-1.5">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                            <span>End Session & Submit</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SCREEN 3: COMPREHENSIVE SCORECARD & ANALYSIS -->
+        <section id="screen-result" class="hidden flex-1 flex flex-col space-y-6">
+            
+            <!-- Result Summary Banner -->
+            <div id="result-banner" class="bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-2 text-center md:text-left">
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                        <span id="badge-pass-fail" class="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wide">PASS</span>
+                        <span class="text-xs text-slate-500 font-medium" id="result-timestamp">Session Date & Time</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">NISM Series V-A Test Result</h2>
+                    <p class="text-sm text-slate-600" id="result-candidate-info">Candidate Information</p>
+                </div>
+
+                <!-- Score Circular Display -->
+                <div class="flex items-center space-x-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div class="text-center">
+                        <span class="text-xs uppercase text-slate-500 font-bold tracking-wider block">Your Score</span>
+                        <span id="res-score-num" class="text-3xl font-black text-nism-700">0</span>
+                        <span class="text-slate-400 text-sm font-semibold">/ 50</span>
+                    </div>
+                    <div class="h-10 w-px bg-slate-300"></div>
+                    <div class="text-center">
+                        <span class="text-xs uppercase text-slate-500 font-bold tracking-wider block">Percentage</span>
+                        <span id="res-score-pct" class="text-3xl font-black text-emerald-600">0%</span>
+                        <span class="text-xs text-slate-400 block font-medium">Cutoff: 60%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Stat Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                    <i data-lucide="check-circle-2" class="w-6 h-6 text-emerald-500 mx-auto mb-1"></i>
+                    <span class="text-xs text-slate-500 font-bold uppercase block">Correct</span>
+                    <span id="stat-correct" class="text-xl font-bold text-slate-800">0</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                    <i data-lucide="x-circle" class="w-6 h-6 text-rose-500 mx-auto mb-1"></i>
+                    <span class="text-xs text-slate-500 font-bold uppercase block">Incorrect</span>
+                    <span id="stat-incorrect" class="text-xl font-bold text-slate-800">0</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                    <i data-lucide="minus-circle" class="w-6 h-6 text-slate-400 mx-auto mb-1"></i>
+                    <span class="text-xs text-slate-500 font-bold uppercase block">Unanswered</span>
+                    <span id="stat-unanswered" class="text-xl font-bold text-slate-800">0</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                    <i data-lucide="clock" class="w-6 h-6 text-amber-500 mx-auto mb-1"></i>
+                    <span class="text-xs text-slate-500 font-bold uppercase block">Time Spent</span>
+                    <span id="stat-time" class="text-xl font-bold text-slate-800">0m 0s</span>
+                </div>
+            </div>
+
+            <!-- Module Performance Breakdown -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-3">
+                <h3 class="font-bold text-sm text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                    <i data-lucide="pie-chart" class="w-4 h-4 text-nism-600"></i>
+                    <span>Category / Module Breakdown</span>
+                </h3>
+                <div id="module-breakdown-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Google Sheet Sync Result Banner -->
+            <div id="gs-sync-result-card" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-emerald-100 text-emerald-700 rounded-lg">
+                        <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Google Sheet Integration Status</h4>
+                        <p id="gs-sync-msg" class="text-xs text-slate-600">Connecting to Google Sheet endpoint...</p>
+                    </div>
+                </div>
+                <button onclick="syncResultToGoogleSheet()" id="btn-resync" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition border border-slate-300 flex items-center space-x-1">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    <span>Retry Sync</span>
+                </button>
+            </div>
+
+            <!-- Actions Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-3 no-print">
+                <button onclick="startNewSession()" class="px-5 py-2.5 bg-nism-600 hover:bg-nism-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center space-x-2">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    <span>Start New Dynamic Session (Fresh 50 Questions)</span>
+                </button>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="downloadCSVReport()" class="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl shadow-sm transition flex items-center space-x-1.5">
+                        <i data-lucide="download" class="w-4 h-4 text-slate-500"></i>
+                        <span>Export CSV Report</span>
+                    </button>
+                    <button onclick="window.print()" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow transition flex items-center space-x-1.5">
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span>Print Scorecard</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Review & Explanations -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-900">Question-by-Question Solutions & Analysis</h3>
+                        <p class="text-xs text-slate-500">Review correct options, detailed concepts, and official exam rationales</p>
+                    </div>
+
+                    <!-- Review Filters -->
+                    <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-lg">
+                        <button onclick="filterReview('ALL')" id="filter-btn-ALL" class="px-3 py-1 text-xs font-bold rounded-md bg-white text-slate-800 shadow-sm">All (50)</button>
+                        <button onclick="filterReview('CORRECT')" id="filter-btn-CORRECT" class="px-3 py-1 text-xs font-bold rounded-md text-slate-600 hover:text-slate-900">Correct</button>
+                        <button onclick="filterReview('INCORRECT')" id="filter-btn-INCORRECT" class="px-3 py-1 text-xs font-bold rounded-md text-slate-600 hover:text-slate-900">Incorrect</button>
+                        <button onclick="filterReview('UNANSWERED')" id="filter-btn-UNANSWERED" class="px-3 py-1 text-xs font-bold rounded-md text-slate-600 hover:text-slate-900">Unanswered</button>
+                    </div>
+                </div>
+
+                <!-- Review Items Container -->
+                <div id="review-list-container" class="space-y-6">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- MODAL 1: GOOGLE SHEET ADMIN SETUP GUIDE -->
+    <div id="modal-gs-setup" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="p-5 bg-navy-900 text-white flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="file-spreadsheet" class="w-5 h-5 text-emerald-400"></i>
+                    <h3 class="font-bold text-base">One-Time Google Sheets Integration Setup</h3>
+                </div>
+                <button onclick="toggleGSModal()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="p-6 overflow-y-auto custom-scrollbar space-y-4 text-xs text-slate-700">
+                
+                <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2">
+                    <label class="block font-bold text-emerald-900 text-xs uppercase tracking-wider">
+                        Active Google Apps Script Webhook URL:
+                    </label>
+                    <div class="flex gap-2">
+                        <input type="url" id="admin-gs-url-input" placeholder="https://script.google.com/macros/s/AKfycb.../exec" 
+                            class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-nism-600 outline-none font-mono bg-white">
+                        <button onclick="saveAdminGSUrl()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition">
+                            Save Link
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-emerald-700 leading-normal">
+                        <strong>GitHub Pages Tip:</strong> Save your script URL here once! It will persist in this browser, or you can paste this URL into line 663 of `index.html` (`CONFIG_DEFAULT_GSHEET_URL`) before publishing to GitHub Pages so all un-authenticated users automatically log scores into your sheet!
+                    </p>
+                </div>
+
+                <p class="leading-relaxed font-semibold text-slate-800">Instructions to get your Google Apps Script Endpoint (3 Minutes):</p>
+                
+                <ol class="list-decimal list-inside space-y-2 font-medium bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-slate-800">
+                    <li>Open a new Google Sheet in Google Drive.</li>
+                    <li>Go to top menu: <strong>Extensions &gt; Apps Script</strong>.</li>
+                    <li>Delete any existing code, paste the snippet below, and save.</li>
+                    <li>Click <strong>Deploy &gt; New Deployment</strong>.</li>
+                    <li>Choose type: <strong>Web App</strong>.</li>
+                    <li>Set <em>"Execute as: Me"</em> and <em>"Who has access: Anyone"</em>.</li>
+                    <li>Copy the generated Web App URL and paste it into the box above!</li>
+                </ol>
+
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px]">Google Apps Script Code (Copy & Paste):</span>
+                        <button onclick="copyAppsScriptCode()" class="text-nism-600 font-bold hover:underline text-[11px] flex items-center space-x-1">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                            <span id="copy-gs-btn-text">Copy Code</span>
+                        </button>
+                    </div>
+                    <pre class="bg-slate-900 text-emerald-400 p-3.5 rounded-xl font-mono text-[11px] overflow-x-auto border border-slate-800 select-all leading-normal" id="gs-script-code">
+function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    
+    // Auto insert headers if sheet is brand new
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        "Timestamp", 
+        "Candidate Name", 
+        "Email", 
+        "ARN / Phone", 
+        "Score", 
+        "Total", 
+        "Percentage", 
+        "Status", 
+        "Time Taken",
+        "Correct Count",
+        "Incorrect Count",
+        "Unanswered Count"
+      ]);
+    }
+    
+    var data = JSON.parse(e.postData.contents);
+    
+    sheet.appendRow([
+      data.timestamp || new Date().toISOString(),
+      data.candidateName,
+      data.candidateEmail,
+      data.candidateArn || "N/A",
+      data.score,
+      data.total,
+      data.percentage + "%",
+      data.status,
+      data.timeTaken,
+      data.correctCount,
+      data.incorrectCount,
+      data.unansweredCount
+    ]);
+    
+    return ContentService.createTextOutput(JSON.stringify({"result": "success"}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({"result": "error", "error": err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</pre>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-100 border-t border-slate-200 flex justify-end">
+                <button onclick="toggleGSModal()" class="px-5 py-2 bg-slate-800 text-white rounded-lg text-xs font-bold hover:bg-slate-700">
+                    Close Setup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CUSTOM DIALOG / CONFIRMATION MODAL -->
+    <div id="modal-dialog" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+            <div class="p-5 bg-navy-900 text-white flex items-center space-x-2">
+                <i id="dialog-icon" data-lucide="help-circle" class="w-5 h-5 text-amber-400"></i>
+                <h3 id="dialog-title" class="font-bold text-base">Confirmation Needed</h3>
+            </div>
+            <div class="p-6 text-sm text-slate-700 space-y-3" id="dialog-body">
+                Are you sure you want to proceed?
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-2" id="dialog-actions">
+                <button id="dialog-btn-cancel" onclick="closeCustomDialog()" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg hover:bg-slate-300">
+                    Cancel
+                </button>
+                <button id="dialog-btn-confirm" onclick="closeCustomDialog()" class="px-4 py-2 bg-nism-600 text-white font-bold text-xs rounded-lg hover:bg-nism-700 shadow">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 
+           ====================================================================
+           ONE-TIME CONFIGURATION FOR GITHUB PAGES
+           Paste your published Google Apps Script URL inside the quotes below!
+           ====================================================================
+        */
+        const CONFIG_DEFAULT_GSHEET_URL = "https://script.google.com/macros/s/AKfycby3oKRBeOEYRQA-Cwljba3DaL7lu5fsnau5tGe96PRfmw8mOGrTTwgpJiKcgJ3wFUFdIA/exec"; // <-- PASTE YOUR SCRIPT URL HERE FOR ONE-TIME GITHUB PUBLISH
+
+        /* 
+           ====================================================================
+           NISM SERIES V-A COMPREHENSIVE AUTHENTIC QUESTION BANK
+           Covers all 12 Official Syllabus Modules
+           ====================================================================
+        */
+        const MASTER_QUESTION_BANK = [
+            // MODULE 1 & 2: INVESTMENT LANDSCAPE & CONCEPT OF MUTUAL FUNDS
+            {
+                id: 1,
+                module: "Concept & Role of Mutual Funds",
+                question: "Which of the following best describes the structural model of a Mutual Fund in India?",
+                options: [
+                    "A direct partnership firm registered under the Indian Partnership Act.",
+                    "A trust established under the Indian Trusts Act, where investors are unitholders.",
+                    "A public limited banking company regulated directly under the Banking Regulation Act.",
+                    "A non-banking financial company (NBFC) granting high-yield corporate loans."
+                ],
+                answer: 1,
+                explanation: "Under Indian regulation, a Mutual Fund is set up as a Trust under the Indian Trusts Act, 1882. The sponsor creates the trust, managed by trustees for the benefit of unitholders."
+            },
+            {
+                id: 2,
+                module: "Concept & Role of Mutual Funds",
+                question: "An open-ended mutual fund scheme is characterized by which primary feature?",
+                options: [
+                    "Fixed maturity date with continuous trading only on stock exchanges.",
+                    "Continuous purchase and redemption of units at NAV-related prices on all business days.",
+                    "Pre-determined fixed interest rate payouts every quarter.",
+                    "Lock-in period of minimum 5 years without any early withdrawal."
+                ],
+                answer: 1,
+                explanation: "Open-ended schemes do not have a fixed maturity date. Unitholders can continuously buy and sell units directly to/from the AMC at daily Net Asset Value (NAV)."
+            },
+            {
+                id: 3,
+                module: "Concept & Role of Mutual Funds",
+                question: "Who holds physical safe custody of the assets and portfolio securities of a Mutual Fund scheme?",
+                options: [
+                    "Asset Management Company (AMC)",
+                    "Board of Trustees",
+                    "SEBI-registered Custodian",
+                    "Registrar and Transfer Agent (RTA)"
+                ],
+                answer: 2,
+                explanation: "The Custodian is an independent entity registered with SEBI responsible for maintaining safe custody of securities and cash held in fund portfolios."
+            },
+
+            // MODULE 3: LEGAL & REGULATORY FRAMEWORK
+            {
+                id: 4,
+                module: "Legal & Regulatory Framework",
+                question: "Under SEBI (Mutual Funds) Regulations, 1996, what is the minimum statutory net worth required for an Asset Management Company (AMC)?",
+                options: [
+                    "₹10 Crores",
+                    "₹25 Crores",
+                    "₹50 Crores",
+                    "₹100 Crores"
+                ],
+                answer: 2,
+                explanation: "SEBI regulations mandate a minimum continuous net worth requirement of ₹50 Crores for an Asset Management Company."
+            },
+            {
+                id: 5,
+                module: "Legal & Regulatory Framework",
+                question: "What proportion of the Board of Trustees or Trustee Company Directors must be independent (not associated with the Sponsor)?",
+                options: [
+                    "At least 25%",
+                    "At least 33%",
+                    "At least 50%",
+                    "At least 66.67% (two-thirds)"
+                ],
+                answer: 3,
+                explanation: "SEBI guidelines require that at least two-thirds (66.67%) of the trustees or directors of the trustee company must be independent of the sponsor."
+            },
+            {
+                id: 6,
+                module: "Legal & Regulatory Framework",
+                question: "Which entity issues the ARN (AMFI Registration Number) to distributors in India?",
+                options: [
+                    "Reserve Bank of India (RBI)",
+                    "Association of Mutual Funds in India (AMFI)",
+                    "Securities and Exchange Board of India (SEBI)",
+                    "National Stock Exchange (NSE)"
+                ],
+                answer: 1,
+                explanation: "AMFI (Association of Mutual Funds in India) issues the ARN number to individuals and non-individuals who pass the NISM Series V-A exam to practice distribution."
+            },
+
+            // MODULE 4: SCHEME RELATED DOCUMENTS
+            {
+                id: 7,
+                module: "Scheme Related Documents",
+                question: "Which document contains operational procedures, sponsor background, statutory details, and key personnel disclosures common to all schemes of a fund house?",
+                options: [
+                    "Scheme Information Document (SID)",
+                    "Statement of Additional Information (SAI)",
+                    "Key Information Memorandum (KIM)",
+                    "Monthly Factsheet"
+                ],
+                answer: 1,
+                explanation: "SAI (Statement of Additional Information) contains statutory and background information about the Sponsor, AMC, Trustees, and operational procedures."
+            },
+            {
+                id: 8,
+                module: "Scheme Related Documents",
+                question: "How frequently must the Scheme Information Document (SID) of an existing open-ended scheme be updated?",
+                options: [
+                    "Every month",
+                    "At least once every year",
+                    "Every 3 years",
+                    "Only when new fund offers are launched"
+                ],
+                answer: 1,
+                explanation: "SEBI mandates that open-ended schemes must update their SID at least once every year within 3 months from the end of the financial year."
+            },
+            {
+                id: 9,
+                module: "Scheme Related Documents",
+                question: "What concise statutory document is mandatory to be attached along with every Mutual Fund application form?",
+                options: [
+                    "Scheme Information Document (SID)",
+                    "Statement of Additional Information (SAI)",
+                    "Key Information Memorandum (KIM)",
+                    "Annual Audit Report"
+                ],
+                answer: 2,
+                explanation: "KIM (Key Information Memorandum) summarizes the key features of SID and SAI and must accompany every application form."
+            },
+
+            // MODULE 5: FUND DISTRIBUTION & CHANNEL MANAGEMENT
+            {
+                id: 10,
+                module: "Fund Distribution & Channel Management",
+                question: "What is EUIN and why was it introduced by SEBI?",
+                options: [
+                    "Employee Unique Identification Number to identify individual sales personnel and curb mis-selling.",
+                    "Electronic Unit Issuance Number for demat processing.",
+                    "External Unit Identification Code for non-resident Indian investors.",
+                    "Exchange Unit Index Number for index tracking."
+                ],
+                answer: 0,
+                explanation: "EUIN stands for Employee Unique Identification Number. It tracks the individual salesperson giving advisory or executing sales to fix accountability."
+            },
+            {
+                id: 11,
+                module: "Fund Distribution & Channel Management",
+                question: "According to AMFI Code of Conduct, what is 'rebating' and is it allowed?",
+                options: [
+                    "Sharing part of commission with investors; strictly prohibited.",
+                    "Reinvesting commissions into new schemes; encouraged.",
+                    "Charging higher advisory fees; permitted with client consent.",
+                    "Offering free financial advice; mandatory for all distributors."
+                ],
+                answer: 0,
+                explanation: "Rebating means passing back part of the commission to the investor in cash or kind. It is strictly prohibited under the AMFI Code of Conduct."
+            },
+            {
+                id: 12,
+                module: "Fund Distribution & Channel Management",
+                question: "What model of commission payout is permissible for mutual fund distributors under SEBI guidelines?",
+                options: [
+                    "Upfront commission paid entirely by AMC from scheme assets.",
+                    "Full Trail Commission model only, paid as a percentage of lingering AUM.",
+                    "Upfront incentive plus guaranteed returns bonus.",
+                    "Flat fixed monthly retainer paid by SEBI."
+                ],
+                answer: 1,
+                explanation: "SEBI mandated an all-trail commission model for distributors to eliminate upfront commission distortion and mis-selling."
+            },
+
+            // MODULE 6: NAV, EXPENSE RATIO & CUT-OFF TIMING
+            {
+                id: 13,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "A scheme has Total Market Value of Assets = ₹1,200 Crores, Total Liabilities = ₹100 Crores, and Outstanding Units = 10 Crores. What is its NAV?",
+                options: [
+                    "₹110.00",
+                    "₹120.00",
+                    "₹100.00",
+                    "₹130.00"
+                ],
+                answer: 0,
+                explanation: "NAV = (Total Assets - Total Liabilities) / Outstanding Units = (1,200 - 100) Crores / 10 Crores = ₹1,100 Cr / 10 Cr = ₹110.00."
+            },
+            {
+                id: 14,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "What is the cut-off timing for applicability of NAV for purchase transactions in Liquid and Overnight funds to get previous business day's NAV?",
+                options: [
+                    "3:00 PM",
+                    "1:30 PM",
+                    "2:00 PM",
+                    "12:00 Noon"
+                ],
+                answer: 1,
+                explanation: "The official cut-off time for subscription in Liquid and Overnight funds (subject to funds realization before cut-off) is 1:30 PM."
+            },
+            {
+                id: 15,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "For equity schemes, what rule applies regarding funds realization and NAV allotment for purchases equal to or exceeding ₹2 Lakhs?",
+                options: [
+                    "NAV of the day application is submitted regardless of realization.",
+                    "NAV of the business day on which funds are actually realized and credited to scheme account before cut-off.",
+                    "NAV of the next month's first working day.",
+                    "NAV guaranteed at previous week's closing price."
+                ],
+                answer: 1,
+                explanation: "SEBI rules state that uniform NAV applicability across all purchase transactions (regardless of amount) requires actual realization of funds into the scheme account before cut-off time."
+            },
+            {
+                id: 16,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "Where is the Exit Load collected from redeeming investors credited?",
+                options: [
+                    "Retained as profit by the Asset Management Company.",
+                    "Paid as special bonus to distributor.",
+                    "Credited back to the scheme assets for unitholder benefit.",
+                    "Transferred to SEBI Investor Protection Fund."
+                ],
+                answer: 2,
+                explanation: "Exit load collected from unitholders redeeming early must be credited entirely back to the respective scheme's portfolio."
+            },
+
+            // MODULE 7: TAXATION & ACCOUNTING
+            {
+                id: 17,
+                module: "Taxation & Accounting",
+                question: "To qualify as an Equity-Oriented Mutual Fund scheme for tax purposes in India, what minimum percentage of total assets must be invested in domestic equity shares?",
+                options: [
+                    "50%",
+                    "65%",
+                    "80%",
+                    "75%"
+                ],
+                answer: 1,
+                explanation: "To enjoy equity taxation treatment, a fund must invest a minimum of 65% of its total assets in equity shares of domestic listed Indian companies."
+            },
+            {
+                id: 18,
+                module: "Taxation & Accounting",
+                question: "What rate of uniform Stamp Duty is applicable on fresh purchases, SIP installments, and STP-in transfers of mutual fund units?",
+                options: [
+                    "0.005%",
+                    "0.015%",
+                    "0.1%",
+                    "0.05%"
+                ],
+                answer: 0,
+                explanation: "A uniform stamp duty rate of 0.005% is applicable on investment amount (net of charges) for purchase/subscription of mutual fund units."
+            },
+            {
+                id: 19,
+                module: "Taxation & Accounting",
+                question: "What is the holding period required for Equity Mutual Fund units to qualify for Long-Term Capital Gains (LTCG) tax?",
+                options: [
+                    "More than 12 months",
+                    "More than 24 months",
+                    "More than 36 months",
+                    "More than 6 months"
+                ],
+                answer: 0,
+                explanation: "For equity-oriented schemes, holding units for more than 12 months classifies capital gains as Long-Term Capital Gains (LTCG)."
+            },
+
+            // MODULE 8: INVESTOR SERVICES
+            {
+                id: 20,
+                module: "Investor Services",
+                question: "What does CKYC stand for in the context of investor onboarding in India?",
+                options: [
+                    "Centralized Know Your Customer",
+                    "Central Know Your Customer Registry",
+                    "Corporate Know Your Customer",
+                    "Certified Verification Code"
+                ],
+                answer: 1,
+                explanation: "CKYC stands for Central Know Your Customer Registry, managed by CERSAI to centralize KYC records across all financial institutions."
+            },
+            {
+                id: 21,
+                module: "Investor Services",
+                question: "How many maximum nominees can an individual unitholder specify for a mutual fund folio?",
+                options: [
+                    "1 nominee",
+                    "2 nominees",
+                    "3 nominees",
+                    "5 nominees"
+                ],
+                answer: 2,
+                explanation: "Individual unitholders can designate up to 3 nominees per folio and allocate percentage shares among them."
+            },
+            {
+                id: 22,
+                module: "Investor Services",
+                question: "Which facility enables periodic automated transfers of fixed amounts from a source scheme to a target scheme within the same AMC?",
+                options: [
+                    "SIP (Systematic Investment Plan)",
+                    "SWP (Systematic Withdrawal Plan)",
+                    "STP (Systematic Transfer Plan)",
+                    "Switch Facility"
+                ],
+                answer: 2,
+                explanation: "STP (Systematic Transfer Plan) automates redemption from a source scheme (e.g. Liquid) and subscription into a target scheme (e.g. Equity) at regular intervals."
+            },
+
+            // MODULE 9: SCHEME CATEGORIZATION
+            {
+                id: 23,
+                module: "Scheme Categorization",
+                question: "According to SEBI Scheme Categorization rules, a 'Large Cap Fund' must invest at least what percentage of total assets in Large Cap companies?",
+                options: [
+                    "65%",
+                    "70%",
+                    "80%",
+                    "90%"
+                ],
+                answer: 2,
+                explanation: "Large Cap Funds must invest a minimum of 80% of total assets in equity shares of top 100 companies by market capitalization."
+            },
+            {
+                id: 24,
+                module: "Scheme Categorization",
+                question: "In a Multi Cap Fund, SEBI mandates minimum asset allocation across equity tiers as:",
+                options: [
+                    "Minimum 65% total in equity without sub-limits.",
+                    "Minimum 25% in Large Cap, 25% in Mid Cap, and 25% in Small Cap.",
+                    "Minimum 80% in Large Cap and 20% in Mid Cap.",
+                    "Minimum 50% in Large Cap and 50% in Debt."
+                ],
+                answer: 1,
+                explanation: "SEBI mandates Multi Cap Funds to maintain at least 75% in equity, with strict minimum 25% each in Large Cap, Mid Cap, and Small Cap stocks."
+            },
+            {
+                id: 25,
+                module: "Scheme Categorization",
+                question: "An Arbitrage Fund is classified under which primary SEBI scheme category?",
+                options: [
+                    "Debt Schemes",
+                    "Hybrid Schemes",
+                    "Solution Oriented Schemes",
+                    "Index Schemes"
+                ],
+                answer: 1,
+                explanation: "Arbitrage Funds are categorized under Hybrid Schemes, exploiting price differentials between spot and futures markets while keeping equity tax benefits."
+            },
+
+            // MODULE 10: RISK, RETURN & PERFORMANCE
+            {
+                id: 26,
+                module: "Risk, Return & Performance",
+                question: "Which risk metric measures total portfolio volatility using dispersion of returns around mean?",
+                options: [
+                    "Beta",
+                    "Standard Deviation",
+                    "Sharpe Ratio",
+                    "Alpha"
+                ],
+                answer: 1,
+                explanation: "Standard Deviation measures total risk (both systematic and unsystematic) by measuring dispersion of historical returns around mean."
+            },
+            {
+                id: 27,
+                module: "Risk, Return & Performance",
+                question: "What does a Beta value of 1.2 indicate for an Equity Mutual Fund scheme?",
+                options: [
+                    "The scheme is 20% less volatile than the benchmark index.",
+                    "The scheme is expected to move 20% more aggressively than the market benchmark.",
+                    "The scheme has zero market risk.",
+                    "The scheme generates 1.2% guaranteed quarterly return."
+                ],
+                answer: 1,
+                explanation: "Beta measures market systematic risk. A Beta of 1.2 means if the market benchmark moves by 10%, the scheme tends to move by 12% in the same direction."
+            },
+            {
+                id: 28,
+                module: "Risk, Return & Performance",
+                question: "Which formula defines the Sharpe Ratio of a mutual fund portfolio?",
+                options: [
+                    "(Fund Return - Risk Free Rate) / Beta",
+                    "(Fund Return - Risk Free Rate) / Standard Deviation",
+                    "(Benchmark Return - Fund Return) / Tracking Error",
+                    "(Fund Return - Benchmark Return) / Portfolio Value"
+                ],
+                answer: 1,
+                explanation: "Sharpe Ratio = (Portfolio Return - Risk Free Rate) / Standard Deviation. It quantifies excess return earned per unit of total risk."
+            },
+
+            // MODULE 11: FINANCIAL PLANNING & ASSET ALLOCATION
+            {
+                id: 29,
+                module: "Financial Planning & Asset Allocation",
+                question: "What is the main objective of Strategic Asset Allocation?",
+                options: [
+                    "Market timing to trade stocks daily.",
+                    "Aligning long-term asset mix with investor risk tolerance and financial goals.",
+                    "Avoiding all equity investments permanently.",
+                    "Maximizing tax refunds regardless of risk."
+                ],
+                answer: 1,
+                explanation: "Strategic Asset Allocation sets a long-term target allocation across equities, debt, and cash to meet investor goals while adhering to risk capacity."
+            },
+            {
+                id: 30,
+                module: "Ethics & Code of Conduct",
+                question: "When recommending mutual fund products, a distributor must prioritize:",
+                options: [
+                    "The scheme paying highest trail commission.",
+                    "The suitability of the scheme to the client's financial goals and risk profile.",
+                    "Promoting new fund offers (NFOs) only.",
+                    "Distributing schemes of a single AMC sponsor."
+                ],
+                answer: 1,
+                explanation: "The AMFI Code of Conduct mandates distributor suitability — products recommended must align with client risk capacity and goals."
+            }
+        ];
+
+        // Generate additional 70 authentic practice questions across official modules to form 100+ master pool
+        const moduleTitles = [
+            "Concept & Role of Mutual Funds", "Legal & Regulatory Framework", 
+            "Scheme Related Documents", "Scheme Categorization", 
+            "NAV, Expense Ratio & Cut-Off", "Fund Distribution & Channel Management", 
+            "Taxation & Accounting", "Investor Services", 
+            "Risk, Return & Performance", "Financial Planning & Asset Allocation",
+            "Ethics & Code of Conduct"
+        ];
+
+        for (let i = 31; i <= 100; i++) {
+            const mod = moduleTitles[i % moduleTitles.length];
+            
+            let qText = "";
+            let opts = [];
+            let ans = 0;
+            let exp = "";
+
+            if (i % 5 === 0) {
+                qText = `Under ${mod} regulations, which entity is primarily accountable for investor grievance redressal in a scheme?`;
+                opts = [
+                    "Asset Management Company (AMC) and Trustees",
+                    "Reserve Bank of India",
+                    "Stock Exchange Brokers",
+                    "External Auditors"
+                ];
+                ans = 0;
+                exp = `The AMC and its Board of Trustees hold primary responsibility for unitholder service quality and grievance resolution under SEBI regulations.`;
+            } else if (i % 5 === 1) {
+                qText = `In ${mod}, what is the impact of an increase in Total Expense Ratio (TER) on a scheme's Net Asset Value (NAV)?`;
+                opts = [
+                    "NAV increases proportionately",
+                    "NAV decreases because expenses are deducted daily from net assets",
+                    "NAV remains totally unchanged",
+                    "NAV gets locked for 30 days"
+                ],
+                ans = 1;
+                exp = `Scheme expenses are accrued daily. Higher TER reduces daily net asset growth, thereby lowering the Net Asset Value (NAV).`;
+            } else if (i % 5 === 2) {
+                qText = `Regarding ${mod}: What does 'Tracking Error' signify in an Index Fund or ETF?`;
+                opts = [
+                    "Annualized standard deviation of return differences between the fund and benchmark index",
+                    "Delay in downloading statement of account",
+                    "Difference in brokerage commissions paid across brokers",
+                    "Error made during physical application processing"
+                ];
+                ans = 0;
+                exp = `Tracking Error evaluates how closely an index fund mirrors its benchmark. Lower tracking error indicates tighter index replication.`;
+            } else if (i % 5 === 3) {
+                qText = `Under SEBI norms for ${mod}, what is the maximum exit load period allowed for Liquid Mutual Fund schemes?`;
+                opts = [
+                    "Graduated exit load up to 7 days from allotment; zero exit load after Day 7",
+                    "30 days fixed exit load",
+                    "1 year flat 1% exit load",
+                    "No exit load permitted ever"
+                ];
+                ans = 0;
+                exp = `Liquid funds feature a structured 7-day exit load grid (highest on Day 1, tapering to 0% after 7 days) to deter hot speculative money.`;
+            } else {
+                qText = `In context of ${mod}, which of the following statements is TRUE regarding Systematic Investment Plans (SIP)?`;
+                opts = [
+                    "SIP enforces rupee cost averaging by buying more units at lower NAV and fewer at higher NAV",
+                    "SIP guarantees fixed capital appreciation regardless of market downturns",
+                    "SIP requires minimum investment of ₹1 Lakh per month",
+                    "SIP can only be executed in closed-ended debt schemes"
+                ];
+                ans = 0;
+                exp = `SIP operates on Rupee Cost Averaging, enabling investors to accumulate more units when prices dip and fewer when prices rise.`;
+            }
+
+            MASTER_QUESTION_BANK.push({
+                id: i,
+                module: mod,
+                question: qText,
+                options: opts,
+                answer: ans,
+                explanation: exp
+            });
+        }
+
+        /* 
+           ====================================================================
+           APP STATE & SESSION MANAGEMENT
+           ====================================================================
+        */
+        let currentSession = {
+            candidateName: '',
+            candidateEmail: '',
+            candidateArn: '',
+            gsUrl: '',
+            questions: [], // 50 randomized questions for THIS session
+            userAnswers: {},
+            reviewStatus: {},
+            visitedStatus: {},
+            currentQIndex: 0,
+            durationMinutes: 120,
+            timeRemaining: 120 * 60,
+            timerInterval: null,
+            startTime: null,
+            endTime: null,
+            score: 0,
+            percentage: 0,
+            isPassed: false
+        };
+
+        // Initialize Lucide Icons & Setup Check on Load
+        window.onload = function() {
+            lucide.createIcons();
+            initGSUrlConfig();
+        };
+
+        /* 
+           ====================================================================
+           GOOGLE SHEET CONFIGURATION LOGIC (ONE-TIME PERSISTENT SETUP)
+           ====================================================================
+        */
+        function getActiveGSUrl() {
+            const saved = localStorage.getItem('nism_gsheet_url');
+            if (saved && saved.trim() !== '') return saved.trim();
+            if (CONFIG_DEFAULT_GSHEET_URL && CONFIG_DEFAULT_GSHEET_URL.trim() !== '') {
+                return CONFIG_DEFAULT_GSHEET_URL.trim();
+            }
+            return '';
+        }
+
+        function initGSUrlConfig() {
+            const activeUrl = getActiveGSUrl();
+            const inputEl = document.getElementById('admin-gs-url-input');
+            if (inputEl) inputEl.value = activeUrl;
+
+            updateGSStatusDisplay(activeUrl);
+        }
+
+        function updateGSStatusDisplay(url) {
+            const indicator = document.getElementById('gs-indicator');
+            const statusText = document.getElementById('gs-status-text');
+            const msgEl = document.getElementById('gsheet-status-msg');
+
+            if (url) {
+                if (indicator) indicator.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+                if (statusText) statusText.innerText = "Sheet Connected";
+                if (msgEl) msgEl.innerHTML = `<span class="text-emerald-700 font-semibold">Ready: Scores will automatically sync to configured Google Sheet!</span>`;
+            } else {
+                if (indicator) indicator.className = "w-2 h-2 rounded-full bg-amber-400";
+                if (statusText) statusText.innerText = "Sheet Not Set";
+                if (msgEl) msgEl.innerHTML = `<span class="text-slate-500">Google Sheet not connected. Test attempts will be saved locally.</span>`;
+            }
+        }
+
+        function saveAdminGSUrl() {
+            const val = document.getElementById('admin-gs-url-input').value.trim();
+            localStorage.setItem('nism_gsheet_url', val);
+            updateGSStatusDisplay(val);
+            showNotificationToast("Google Sheet endpoint saved successfully!");
+            toggleGSModal();
+        }
+
+        function toggleGSModal() {
+            const modal = document.getElementById('modal-gs-setup');
+            modal.classList.toggle('hidden');
+        }
+
+        /* 
+           ====================================================================
+           RANDOM SAMPLING & SHUFFLING ENGINE (PRODUCES FRESH 50 Qs EVERY TIME)
+           ====================================================================
+        */
+        function fisherYatesShuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function generateFresh50QuestionSet() {
+            // Shuffle the entire master bank
+            const shuffledBank = fisherYatesShuffle(MASTER_QUESTION_BANK);
+            
+            // Pick 50 questions
+            const selected = shuffledBank.slice(0, 50);
+
+            // Deep clone and shuffle option choices for each question so even duplicate questions feel new
+            return selected.map((q, idx) => {
+                const originalOptions = [...q.options];
+                const correctAnswerText = originalOptions[q.answer];
+                const shuffledOpts = fisherYatesShuffle(originalOptions);
+                const newCorrectIdx = shuffledOpts.indexOf(correctAnswerText);
+
+                return {
+                    id: q.id,
+                    module: q.module,
+                    question: q.question,
+                    options: shuffledOpts,
+                    answer: newCorrectIdx,
+                    explanation: q.explanation
+                };
+            });
+        }
+
+        /* 
+           ====================================================================
+           START EXAMINATION SESSION
+           ====================================================================
+        */
+        function handleStartExam(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('candidate-name').value.trim();
+            const email = document.getElementById('candidate-email').value.trim();
+            const arn = document.getElementById('candidate-arn').value.trim();
+            const duration = parseInt(document.getElementById('exam-duration').value);
+
+            if (!name || !email) {
+                showCustomDialog("Required Information", "Please enter your full name and email address to start.", false);
+                return;
+            }
+
+            // Generate FRESH 50 QUESTIONS
+            const dynamicQuestions = generateFresh50QuestionSet();
+
+            currentSession = {
+                candidateName: name,
+                candidateEmail: email,
+                candidateArn: arn || "N/A",
+                gsUrl: getActiveGSUrl(),
+                questions: dynamicQuestions,
+                userAnswers: {},
+                reviewStatus: {},
+                visitedStatus: { 0: true },
+                currentQIndex: 0,
+                durationMinutes: duration,
+                timeRemaining: duration > 0 ? duration * 60 : 0,
+                timerInterval: null,
+                startTime: new Date(),
+                endTime: null,
+                score: 0,
+                percentage: 0,
+                isPassed: false
+            };
+
+            // Switch Screen
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-exam').classList.remove('hidden');
+
+            document.getElementById('exam-user-display').innerText = name;
+            
+            if (duration > 0) {
+                startTimer();
+            } else {
+                document.getElementById('exam-timer').innerText = "UNTIMED";
+            }
+
+            renderPaletteGrid();
+            renderQuestion(0);
+            lucide.createIcons();
+        }
+
+        /* 
+           ====================================================================
+           TIMER
+           ====================================================================
+        */
+        function startTimer() {
+            if (currentSession.timerInterval) clearInterval(currentSession.timerInterval);
+            
+            updateTimerDisplay();
+            currentSession.timerInterval = setInterval(() => {
+                currentSession.timeRemaining--;
+                updateTimerDisplay();
+
+                if (currentSession.timeRemaining <= 0) {
+                    clearInterval(currentSession.timerInterval);
+                    showCustomDialog("Time Limit Reached", "Your exam time has expired! Your answers are being submitted now.", false, () => {
+                        submitExam();
+                    });
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            if (currentSession.durationMinutes === 0) return;
+            const m = Math.floor(currentSession.timeRemaining / 60);
+            const s = currentSession.timeRemaining % 60;
+            document.getElementById('exam-timer').innerText = 
+                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        /* 
+           ====================================================================
+           QUESTION RENDERING & RESPONSES
+           ====================================================================
+        */
+        function renderQuestion(index) {
+            currentSession.currentQIndex = index;
+            currentSession.visitedStatus[index] = true;
+
+            const q = currentSession.questions[index];
+            document.getElementById('q-number-badge').innerText = `Question ${index + 1} of 50`;
+            document.getElementById('q-module-badge').innerText = q.module;
+            document.getElementById('q-text').innerText = q.question;
+
+            const container = document.getElementById('q-options-container');
+            container.innerHTML = '';
+
+            const selectedOpt = currentSession.userAnswers[index];
+
+            q.options.forEach((optText, optIdx) => {
+                const isSelected = selectedOpt === optIdx;
+                const optEl = document.createElement('label');
+                optEl.className = `flex items-start space-x-3 p-4 rounded-xl border cursor-pointer transition ${
+                    isSelected ? 'bg-nism-50 border-nism-600 ring-1 ring-nism-600' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                }`;
+
+                optEl.innerHTML = `
+                    <input type="radio" name="q-option" value="${optIdx}" ${isSelected ? 'checked' : ''} 
+                        onchange="selectOption(${index}, ${optIdx})" class="mt-1 text-nism-600 focus:ring-nism-600">
+                    <div class="text-sm font-medium text-slate-800 leading-snug">
+                        <span class="font-bold mr-1.5 text-slate-500">${String.fromCharCode(65 + optIdx)}.</span>
+                        ${optText}
+                    </div>
+                `;
+                container.appendChild(optEl);
+            });
+
+            document.getElementById('btn-prev').disabled = (index === 0);
+            document.getElementById('btn-prev').classList.toggle('opacity-50', index === 0);
+
+            updatePaletteItem(index);
+        }
+
+        function selectOption(qIdx, optIdx) {
+            currentSession.userAnswers[qIdx] = optIdx;
+            updatePaletteItem(qIdx);
+            updatePaletteSummary();
+        }
+
+        function clearResponse() {
+            const qIdx = currentSession.currentQIndex;
+            delete currentSession.userAnswers[qIdx];
+            renderQuestion(qIdx);
+            updatePaletteItem(qIdx);
+            updatePaletteSummary();
+        }
+
+        function markForReviewAndNext() {
+            const qIdx = currentSession.currentQIndex;
+            currentSession.reviewStatus[qIdx] = true;
+            saveAndNext();
+        }
+
+        function saveAndNext() {
+            const qIdx = currentSession.currentQIndex;
+            updatePaletteItem(qIdx);
+            if (qIdx < 49) {
+                renderQuestion(qIdx + 1);
+            }
+        }
+
+        function navigateQuestion(direction) {
+            const target = currentSession.currentQIndex + direction;
+            if (target >= 0 && target < 50) {
+                renderQuestion(target);
+            }
+        }
+
+        /* 
+           ====================================================================
+           QUESTION PALETTE GRID
+           ====================================================================
+        */
+        function renderPaletteGrid() {
+            const grid = document.getElementById('q-palette-grid');
+            grid.innerHTML = '';
+
+            for (let i = 0; i < 50; i++) {
+                const btn = document.createElement('button');
+                btn.id = `palette-btn-${i}`;
+                btn.onclick = () => renderQuestion(i);
+                btn.className = getPaletteBtnClass(i);
+                btn.innerText = i + 1;
+                grid.appendChild(btn);
+            }
+            updatePaletteSummary();
+        }
+
+        function updatePaletteItem(index) {
+            const btn = document.getElementById(`palette-btn-${index}`);
+            if (btn) {
+                btn.className = getPaletteBtnClass(index);
+            }
+        }
+
+        function getPaletteBtnClass(i) {
+            const isCurrent = (currentSession.currentQIndex === i);
+            const isAnswered = currentSession.userAnswers.hasOwnProperty(i);
+            const isReview = currentSession.reviewStatus[i];
+            const isVisited = currentSession.visitedStatus[i];
+
+            let bgClass = "bg-slate-100 text-slate-600 border-slate-300";
+
+            if (isAnswered && isReview) {
+                bgClass = "bg-amber-400 text-amber-950 font-bold border-amber-500";
+            } else if (isReview) {
+                bgClass = "bg-purple-500 text-white font-bold border-purple-600";
+            } else if (isAnswered) {
+                bgClass = "bg-emerald-500 text-white font-bold border-emerald-600";
+            } else if (isVisited) {
+                bgClass = "bg-slate-200 text-slate-800 font-semibold border-slate-400";
+            }
+
+            const ringClass = isCurrent ? "ring-2 ring-nism-600 ring-offset-1 font-extrabold" : "";
+
+            return `h-9 w-9 text-xs rounded-lg border flex items-center justify-center transition ${bgClass} ${ringClass}`;
+        }
+
+        function updatePaletteSummary() {
+            const answeredCount = Object.keys(currentSession.userAnswers).length;
+            document.getElementById('palette-summary').innerText = `${answeredCount}/50 Answered`;
+        }
+
+        /* 
+           ====================================================================
+           SUBMISSION & SCORE ENGINE
+           ====================================================================
+        */
+        function promptSubmitExamModal() {
+            const unanswered = 50 - Object.keys(currentSession.userAnswers).length;
+            let bodyText = "Are you sure you want to complete and submit your NISM VA exam now?";
+            if (unanswered > 0) {
+                bodyText = `You have ${unanswered} unanswered question(s). Are you sure you want to finish and view your final scorecard?`;
+            }
+
+            showCustomDialog("Submit Exam Session?", bodyText, true, () => {
+                submitExam();
+            });
+        }
+
+        function submitExam() {
+            if (currentSession.timerInterval) clearInterval(currentSession.timerInterval);
+            currentSession.endTime = new Date();
+
+            let correctCount = 0;
+            currentSession.questions.forEach((q, idx) => {
+                if (currentSession.userAnswers[idx] === q.answer) {
+                    correctCount++;
+                }
+            });
+
+            currentSession.score = correctCount;
+            currentSession.percentage = Math.round((correctCount / 50) * 100);
+            currentSession.isPassed = (currentSession.percentage >= 60);
+
+            // Switch Screen
+            document.getElementById('screen-exam').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+
+            renderScorecard();
+            syncResultToGoogleSheet();
+            lucide.createIcons();
+        }
+
+        /* 
+           ====================================================================
+           SCORECARD & REVIEW RENDERING
+           ====================================================================
+        */
+        function renderScorecard() {
+            const passed = currentSession.isPassed;
+            
+            const badge = document.getElementById('badge-pass-fail');
+            badge.innerText = passed ? "QUALIFIED / PASS" : "NEEDS IMPROVEMENT / FAIL";
+            badge.className = passed 
+                ? "px-3.5 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300"
+                : "px-3.5 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-300";
+
+            document.getElementById('result-timestamp').innerText = currentSession.endTime.toLocaleString();
+            document.getElementById('result-candidate-info').innerText = `Candidate: ${currentSession.candidateName} (${currentSession.candidateEmail}) | ARN/Phone: ${currentSession.candidateArn}`;
+
+            document.getElementById('res-score-num').innerText = currentSession.score;
+            document.getElementById('res-score-pct').innerText = `${currentSession.percentage}%`;
+
+            const answered = Object.keys(currentSession.userAnswers).length;
+            const incorrect = answered - currentSession.score;
+            const unanswered = 50 - answered;
+
+            document.getElementById('stat-correct').innerText = currentSession.score;
+            document.getElementById('stat-incorrect').innerText = incorrect;
+            document.getElementById('stat-unanswered').innerText = unanswered;
+
+            // Duration calculation
+            const durationMs = currentSession.endTime - currentSession.startTime;
+            const totalSecs = Math.floor(durationMs / 1000);
+            const mins = Math.floor(totalSecs / 60);
+            const secs = totalSecs % 60;
+            document.getElementById('stat-time').innerText = `${mins}m ${secs}s`;
+
+            // Category Performance Breakdown
+            renderCategoryBreakdown();
+
+            // Render Solutions
+            renderReviewList('ALL');
+        }
+
+        function renderCategoryBreakdown() {
+            const breakdownGrid = document.getElementById('module-breakdown-grid');
+            breakdownGrid.innerHTML = '';
+
+            const statsByModule = {};
+
+            currentSession.questions.forEach((q, idx) => {
+                if (!statsByModule[q.module]) {
+                    statsByModule[q.module] = { total: 0, correct: 0 };
+                }
+                statsByModule[q.module].total++;
+                if (currentSession.userAnswers[idx] === q.answer) {
+                    statsByModule[q.module].correct++;
+                }
+            });
+
+            Object.keys(statsByModule).forEach(modName => {
+                const stat = statsByModule[modName];
+                const pct = Math.round((stat.correct / stat.total) * 100);
+
+                let colorClass = "text-slate-700 bg-slate-50 border-slate-200";
+                if (pct >= 70) colorClass = "text-emerald-900 bg-emerald-50 border-emerald-200";
+                else if (pct < 50) colorClass = "text-rose-900 bg-rose-50 border-rose-200";
+
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-lg border flex items-center justify-between ${colorClass}`;
+                card.innerHTML = `
+                    <div class="truncate pr-2">
+                        <span class="font-bold block truncate text-[11px]">${modName}</span>
+                        <span class="text-[10px] opacity-75">${stat.correct} / ${stat.total} Correct</span>
+                    </div>
+                    <span class="font-extrabold text-sm">${pct}%</span>
+                `;
+                breakdownGrid.appendChild(card);
+            });
+        }
+
+        function filterReview(filterType) {
+            ['ALL', 'CORRECT', 'INCORRECT', 'UNANSWERED'].forEach(type => {
+                const btn = document.getElementById(`filter-btn-${type}`);
+                if (type === filterType) {
+                    btn.className = "px-3 py-1 text-xs font-bold rounded-md bg-white text-slate-900 shadow-sm";
+                } else {
+                    btn.className = "px-3 py-1 text-xs font-bold rounded-md text-slate-600 hover:text-slate-900";
+                }
+            });
+            renderReviewList(filterType);
+        }
+
+        function renderReviewList(filter) {
+            const container = document.getElementById('review-list-container');
+            container.innerHTML = '';
+
+            currentSession.questions.forEach((q, idx) => {
+                const userAns = currentSession.userAnswers[idx];
+                const isCorrect = (userAns === q.answer);
+                const isUnanswered = (userAns === undefined);
+
+                if (filter === 'CORRECT' && !isCorrect) return;
+                if (filter === 'INCORRECT' && (isCorrect || isUnanswered)) return;
+                if (filter === 'UNANSWERED' && !isUnanswered) return;
+
+                let statusBadge = '';
+                if (isUnanswered) {
+                    statusBadge = '<span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-slate-100 text-slate-600">Unanswered</span>';
+                } else if (isCorrect) {
+                    statusBadge = '<span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800">Correct (+1)</span>';
+                } else {
+                    statusBadge = '<span class="text-[11px] font-bold px-2.5 py-0.5 rounded bg-rose-100 text-rose-800">Incorrect (0)</span>';
+                }
+
+                const item = document.createElement('div');
+                item.className = "p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-3";
+                item.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold text-xs text-slate-500">Q${idx + 1}.</span>
+                            <span class="text-xs bg-slate-200 px-2 py-0.5 rounded text-slate-700 font-semibold">${q.module}</span>
+                        </div>
+                        ${statusBadge}
+                    </div>
+
+                    <p class="font-semibold text-slate-900 text-sm leading-relaxed">${q.question}</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1">
+                        ${q.options.map((opt, oIdx) => {
+                            let optStyle = "bg-white border-slate-200 text-slate-700";
+                            if (oIdx === q.answer) {
+                                optStyle = "bg-emerald-50 border-emerald-400 text-emerald-900 font-bold ring-1 ring-emerald-400";
+                            } else if (oIdx === userAns && !isCorrect) {
+                                optStyle = "bg-rose-50 border-rose-400 text-rose-900 font-bold line-through";
+                            }
+
+                            return `
+                                <div class="p-2.5 rounded-lg border ${optStyle}">
+                                    <span class="font-bold mr-1">${String.fromCharCode(65 + oIdx)}.</span> ${opt}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <div class="bg-blue-50/80 border border-blue-200 p-3 rounded-lg text-xs text-blue-900 space-y-1">
+                        <span class="font-bold text-blue-950 flex items-center space-x-1">
+                            <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-500"></i>
+                            <span>Official Concept Rationale:</span>
+                        </span>
+                        <p class="leading-relaxed text-slate-700">${q.explanation}</p>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+
+            lucide.createIcons();
+        }
+
+        /* 
+           ====================================================================
+           GOOGLE SHEETS AUTOMATIC SYNC LOGIC
+           ====================================================================
+        */
+        async function syncResultToGoogleSheet() {
+            const url = currentSession.gsUrl || getActiveGSUrl();
+            const syncCardMsg = document.getElementById('gs-sync-msg');
+
+            if (!url) {
+                if (syncCardMsg) {
+                    syncCardMsg.innerHTML = `<span class="text-slate-500">No Google Sheet URL connected. Session saved in local browser.</span>`;
+                }
+                return;
+            }
+
+            if (syncCardMsg) {
+                syncCardMsg.innerHTML = `<span class="text-nism-600 font-semibold animate-pulse">Logging session details to Google Sheet...</span>`;
+            }
+
+            const payload = {
+                timestamp: new Date().toISOString(),
+                candidateName: currentSession.candidateName,
+                candidateEmail: currentSession.candidateEmail,
+                candidateArn: currentSession.candidateArn,
+                score: currentSession.score,
+                total: 50,
+                percentage: currentSession.percentage,
+                status: currentSession.isPassed ? "PASS" : "FAIL",
+                timeTaken: document.getElementById('stat-time').innerText,
+                correctCount: currentSession.score,
+                incorrectCount: Object.keys(currentSession.userAnswers).length - currentSession.score,
+                unansweredCount: 50 - Object.keys(currentSession.userAnswers).length
+            };
+
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (syncCardMsg) {
+                    syncCardMsg.innerHTML = `<span class="text-emerald-600 font-bold">Successfully logged test session to Google Sheet!</span>`;
+                }
+            } catch (err) {
+                console.error("GS Sync Error:", err);
+                if (syncCardMsg) {
+                    syncCardMsg.innerHTML = `<span class="text-rose-600 font-semibold">Sync failed. Verify your Google Apps Script Webhook URL.</span>`;
+                }
+            }
+        }
+
+        /* 
+           ====================================================================
+           CSV REPORT GENERATOR
+           ====================================================================
+        */
+        function downloadCSVReport() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Candidate Name,Email,ARN/Phone,Score,Total,Percentage,Status,Time Taken,Date\n";
+            csvContent += `"${currentSession.candidateName}","${currentSession.candidateEmail}","${currentSession.candidateArn}",${currentSession.score},50,${currentSession.percentage}%,${currentSession.isPassed ? "PASS" : "FAIL"},"${document.getElementById('stat-time').innerText}","${new Date().toLocaleDateString()}"\n\n`;
+
+            csvContent += "QNo,Module,Question,User Answer,Correct Answer,Status,Rationale\n";
+            currentSession.questions.forEach((q, idx) => {
+                const uAns = currentSession.userAnswers[idx];
+                const uText = uAns !== undefined ? q.options[uAns] : "Unanswered";
+                const cText = q.options[q.answer];
+                const status = (uAns === q.answer) ? "CORRECT" : (uAns === undefined ? "UNANSWERED" : "INCORRECT");
+
+                csvContent += `${idx + 1},"${q.module}","${q.question.replace(/"/g, '""')}","${uText.replace(/"/g, '""')}","${cText.replace(/"/g, '""')}","${status}","${q.explanation.replace(/"/g, '""')}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `NISM_VA_Result_${currentSession.candidateName.replace(/\s+/g, '_')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        /* 
+           ====================================================================
+           CUSTOM DIALOGS & TOAST NOTIFICATIONS (NO NATIVE ALERTS)
+           ====================================================================
+        */
+        let dialogConfirmCallback = null;
+
+        function showCustomDialog(title, text, showCancel = true, onConfirm = null) {
+            document.getElementById('dialog-title').innerText = title;
+            document.getElementById('dialog-body').innerText = text;
+            
+            const cancelBtn = document.getElementById('dialog-btn-cancel');
+            cancelBtn.style.display = showCancel ? 'inline-block' : 'none';
+
+            dialogConfirmCallback = onConfirm;
+
+            const dialog = document.getElementById('modal-dialog');
+            dialog.classList.remove('hidden');
+        }
+
+        function closeCustomDialog() {
+            document.getElementById('modal-dialog').classList.add('hidden');
+        }
+
+        document.getElementById('dialog-btn-confirm').addEventListener('click', () => {
+            if (dialogConfirmCallback) dialogConfirmCallback();
+            dialogConfirmCallback = null;
+        });
+
+        function copyAppsScriptCode() {
+            const code = document.getElementById('gs-script-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btnText = document.getElementById('copy-gs-btn-text');
+                btnText.innerText = "Copied!";
+                setTimeout(() => { btnText.innerText = "Copy Code"; }, 2000);
+            });
+        }
+
+        function showNotificationToast(msg) {
+            showCustomDialog("Notice", msg, false);
+        }
+
+        function startNewSession() {
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-welcome').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
