@@ -57,7 +57,7 @@
                 <div>
                     <h1 class="font-bold text-base sm:text-lg leading-tight flex items-center gap-2">
                         <span>NISM Series V-A</span>
-                        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">2026 Updated</span>
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">200-Question Master Pool</span>
                     </h1>
                     <p class="text-xs text-slate-300 hidden sm:block">Mutual Fund Distributors Certification Practice Portal</p>
                 </div>
@@ -85,7 +85,7 @@
                 <div class="bg-gradient-to-r from-navy-900 via-nism-900 to-nism-800 p-6 sm:p-8 text-white text-center">
                     <span class="inline-block px-3 py-1 bg-nism-600/80 text-xs font-semibold rounded-full uppercase tracking-wider mb-2 border border-nism-400/30">Official NISM V-A Syllabus Aligned</span>
                     <h2 class="text-2xl sm:text-3xl font-bold">Interactive Mock Test Engine</h2>
-                    <p class="text-slate-200 text-sm mt-1">50 Fresh Randomized Questions • Real Exam Conditions • Automatic Cloud Sync</p>
+                    <p class="text-slate-200 text-sm mt-1">50 Fresh Randomized Questions • 200-Question Dynamic Pool • Cloud Sync</p>
                 </div>
 
                 <form id="form-registration" onsubmit="handleStartExam(event)" class="p-6 sm:p-8 space-y-5">
@@ -146,10 +146,11 @@
                             <span>NISM Series V-A Test Parameters:</span>
                         </div>
                         <ul class="list-disc list-inside space-y-1 text-slate-700">
-                            <li><strong>Dynamic Selection:</strong> 50 unique questions sampled randomly from our comprehensive pool every single attempt.</li>
-                            <li><strong>Passing Standard:</strong> 60% (30 out of 50 marks required to pass).</li>
-                            <li><strong>No Negative Marking:</strong> 1 mark per correct answer, 0 for wrong/unanswered.</li>
-                            <li><strong>Complete Analytics:</strong> Instant score, category-wise performance break-up, and detailed question rationales upon submission.</li>
+                            <li><strong>Dynamic Sampling:</strong> 50 random questions selected from a bank of 200 questions on every attempt.</li>
+                            <li><strong>Double Randomization:</strong> Both the 50 questions and their 4 options (A, B, C, D) are shuffled.</li>
+                            <li><strong>Passing Standard:</strong> 60% (30 marks out of 50 required to pass).</li>
+                            <li><strong>Scoring Rules:</strong> 1 mark per correct answer; 0 for incorrect or unanswered questions (No negative marking).</li>
+                            <li><strong>Google Sheet Sync:</strong> Results log automatically to your connected Google Sheet.</li>
                         </ul>
                     </div>
 
@@ -414,7 +415,7 @@
             <div class="p-5 bg-navy-900 text-white flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <i data-lucide="file-spreadsheet" class="w-5 h-5 text-emerald-400"></i>
-                    <h3 class="font-bold text-base">One-Time Google Sheets Integration Setup</h3>
+                    <h3 class="font-bold text-base">Google Sheets Integration Setup</h3>
                 </div>
                 <button onclick="toggleGSModal()" class="text-slate-400 hover:text-white p-1 rounded-lg">
                     <i data-lucide="x" class="w-5 h-5"></i>
@@ -435,25 +436,24 @@
                         </button>
                     </div>
                     <p class="text-[11px] text-emerald-700 leading-normal">
-                        <strong>GitHub Pages Tip:</strong> Save your script URL here once! It will persist in this browser, or you can paste this URL into line 663 of `index.html` (`CONFIG_DEFAULT_GSHEET_URL`) before publishing to GitHub Pages so all un-authenticated users automatically log scores into your sheet!
+                        Your pre-configured URL is already active below and in the file config! All candidate submissions will automatically log to your Google Sheet.
                     </p>
                 </div>
 
-                <p class="leading-relaxed font-semibold text-slate-800">Instructions to get your Google Apps Script Endpoint (3 Minutes):</p>
+                <p class="leading-relaxed font-semibold text-slate-800">Apps Script Endpoint Configuration Steps:</p>
                 
                 <ol class="list-decimal list-inside space-y-2 font-medium bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-slate-800">
-                    <li>Open a new Google Sheet in Google Drive.</li>
-                    <li>Go to top menu: <strong>Extensions &gt; Apps Script</strong>.</li>
-                    <li>Delete any existing code, paste the snippet below, and save.</li>
-                    <li>Click <strong>Deploy &gt; New Deployment</strong>.</li>
-                    <li>Choose type: <strong>Web App</strong>.</li>
+                    <li>Open your Google Sheet in Google Drive.</li>
+                    <li>Go to: <strong>Extensions &gt; Apps Script</strong>.</li>
+                    <li>Ensure the snippet below is pasted and saved.</li>
+                    <li>Click <strong>Deploy &gt; Manage Deployments / New Deployment</strong>.</li>
                     <li>Set <em>"Execute as: Me"</em> and <em>"Who has access: Anyone"</em>.</li>
-                    <li>Copy the generated Web App URL and paste it into the box above!</li>
+                    <li>Paste that URL in this box if you ever create a new sheet.</li>
                 </ol>
 
                 <div class="space-y-1.5">
                     <div class="flex items-center justify-between">
-                        <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px]">Google Apps Script Code (Copy & Paste):</span>
+                        <span class="font-bold text-slate-800 uppercase tracking-wider text-[11px]">Apps Script Webhook Code:</span>
                         <button onclick="copyAppsScriptCode()" class="text-nism-600 font-bold hover:underline text-[11px] flex items-center space-x-1">
                             <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                             <span id="copy-gs-btn-text">Copy Code</span>
@@ -464,7 +464,6 @@ function doPost(e) {
   try {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     
-    // Auto insert headers if sheet is brand new
     if (sheet.getLastRow() === 0) {
       sheet.appendRow([
         "Timestamp", 
@@ -542,508 +541,2191 @@ function doPost(e) {
         /* 
            ====================================================================
            ONE-TIME CONFIGURATION FOR GITHUB PAGES
-           Paste your published Google Apps Script URL inside the quotes below!
+           Preserving your active Google Apps Script Webhook URL
            ====================================================================
         */
-        const CONFIG_DEFAULT_GSHEET_URL = "https://script.google.com/macros/s/AKfycby3oKRBeOEYRQA-Cwljba3DaL7lu5fsnau5tGe96PRfmw8mOGrTTwgpJiKcgJ3wFUFdIA/exec"; // <-- PASTE YOUR SCRIPT URL HERE FOR ONE-TIME GITHUB PUBLISH
+        const CONFIG_DEFAULT_GSHEET_URL = "https://script.google.com/macros/s/AKfycby3oKRBeOEYRQA-Cwljba3DaL7lu5fsnau5tGe96PRfmw8mOGrTTwgpJiKcgJ3wFUFdIA/exec";
 
         /* 
            ====================================================================
-           NISM SERIES V-A COMPREHENSIVE AUTHENTIC QUESTION BANK
-           Covers all 12 Official Syllabus Modules
+           NISM SERIES V-A COMPREHENSIVE 200-QUESTION MASTER POOL
+           100% Authentic Exam-Grade Questions Covering all 12 Official Modules
            ====================================================================
         */
         const MASTER_QUESTION_BANK = [
-            // MODULE 1 & 2: INVESTMENT LANDSCAPE & CONCEPT OF MUTUAL FUNDS
+            // ==========================================
+            // MODULE 1: INVESTMENT LANDSCAPE (Q1 - Q17)
+            // ==========================================
             {
                 id: 1,
-                module: "Concept & Role of Mutual Funds",
-                question: "Which of the following best describes the structural model of a Mutual Fund in India?",
-                options: [
-                    "A direct partnership firm registered under the Indian Partnership Act.",
-                    "A trust established under the Indian Trusts Act, where investors are unitholders.",
-                    "A public limited banking company regulated directly under the Banking Regulation Act.",
-                    "A non-banking financial company (NBFC) granting high-yield corporate loans."
-                ],
+                module: "Investment Landscape",
+                question: "An investor places ₹1,00,000 in a fixed deposit earning 7.5% nominal interest annually. If CPI inflation is 4.5%, what is the investor's exact real return?",
+                options: ["3.00%", "2.87%", "12.00%", "-3.00%"],
                 answer: 1,
-                explanation: "Under Indian regulation, a Mutual Fund is set up as a Trust under the Indian Trusts Act, 1882. The sponsor creates the trust, managed by trustees for the benefit of unitholders."
+                explanation: "Exact Real Rate = [(1 + Nominal Rate) / (1 + Inflation Rate)] - 1 = (1.075 / 1.045) - 1 = 2.87%."
             },
             {
                 id: 2,
-                module: "Concept & Role of Mutual Funds",
-                question: "An open-ended mutual fund scheme is characterized by which primary feature?",
-                options: [
-                    "Fixed maturity date with continuous trading only on stock exchanges.",
-                    "Continuous purchase and redemption of units at NAV-related prices on all business days.",
-                    "Pre-determined fixed interest rate payouts every quarter.",
-                    "Lock-in period of minimum 5 years without any early withdrawal."
-                ],
-                answer: 1,
-                explanation: "Open-ended schemes do not have a fixed maturity date. Unitholders can continuously buy and sell units directly to/from the AMC at daily Net Asset Value (NAV)."
+                module: "Investment Landscape",
+                question: "Which of the following risks cannot be diversified away, regardless of how many domestic company stocks are added to a portfolio?",
+                options: ["Labor strike risk at a manufacturing plant", "CEO resignation risk", "Market risk stemming from geopolitical war and RBI rate hikes", "Default risk on a corporate bond"],
+                answer: 2,
+                explanation: "Systematic (market) risk affects the entire macroeconomic environment and cannot be eliminated by micro-level diversification."
             },
             {
                 id: 3,
-                module: "Concept & Role of Mutual Funds",
-                question: "Who holds physical safe custody of the assets and portfolio securities of a Mutual Fund scheme?",
-                options: [
-                    "Asset Management Company (AMC)",
-                    "Board of Trustees",
-                    "SEBI-registered Custodian",
-                    "Registrar and Transfer Agent (RTA)"
-                ],
+                module: "Investment Landscape",
+                question: "When interest rates in the economy rise by 75 basis points, what happens to the price of an existing 10-year Government bond paying an 8% coupon?",
+                options: ["The bond price increases", "The bond price remains completely unchanged", "The bond price falls to align its yield with higher market rates", "The face value of the bond decreases"],
                 answer: 2,
-                explanation: "The Custodian is an independent entity registered with SEBI responsible for maintaining safe custody of securities and cash held in fund portfolios."
+                explanation: "Bond prices and interest rates share an inverse relationship. When market yields rise, the secondary market price of existing fixed coupon bonds falls."
             },
-
-            // MODULE 3: LEGAL & REGULATORY FRAMEWORK
             {
                 id: 4,
-                module: "Legal & Regulatory Framework",
-                question: "Under SEBI (Mutual Funds) Regulations, 1996, what is the minimum statutory net worth required for an Asset Management Company (AMC)?",
-                options: [
-                    "₹10 Crores",
-                    "₹25 Crores",
-                    "₹50 Crores",
-                    "₹100 Crores"
-                ],
+                module: "Investment Landscape",
+                question: "Which instrument carries zero reinvestment risk for an investor holding it until its final maturity?",
+                options: ["Quarterly coupon-paying corporate debenture", "Half-yearly coupon Central Government G-Sec", "Zero-Coupon Bond / Deep Discount Bond", "Perpetual Additional Tier-1 (AT1) Bank Bond"],
                 answer: 2,
-                explanation: "SEBI regulations mandate a minimum continuous net worth requirement of ₹50 Crores for an Asset Management Company."
+                explanation: "Because zero-coupon bonds make no intermediate interest payments, there are no interim cash flows to reinvest, eliminating reinvestment risk."
             },
             {
                 id: 5,
-                module: "Legal & Regulatory Framework",
-                question: "What proportion of the Board of Trustees or Trustee Company Directors must be independent (not associated with the Sponsor)?",
-                options: [
-                    "At least 25%",
-                    "At least 33%",
-                    "At least 50%",
-                    "At least 66.67% (two-thirds)"
-                ],
-                answer: 3,
-                explanation: "SEBI guidelines require that at least two-thirds (66.67%) of the trustees or directors of the trustee company must be independent of the sponsor."
+                module: "Investment Landscape",
+                question: "Which money market instrument is an unsecured short-term promissory note issued by highly rated corporate borrowers to meet working capital needs?",
+                options: ["Treasury Bill (T-Bill)", "Certificate of Deposit (CD)", "Commercial Paper (CP)", "Collateralized Borrowing and Lending Obligation"],
+                answer: 2,
+                explanation: "Commercial Paper (CP) is an unsecured money market promissory note issued by corporates and financial institutions."
             },
             {
                 id: 6,
-                module: "Legal & Regulatory Framework",
-                question: "Which entity issues the ARN (AMFI Registration Number) to distributors in India?",
-                options: [
-                    "Reserve Bank of India (RBI)",
-                    "Association of Mutual Funds in India (AMFI)",
-                    "Securities and Exchange Board of India (SEBI)",
-                    "National Stock Exchange (NSE)"
-                ],
+                module: "Investment Landscape",
+                question: "A bond has a Modified Duration of 6.5 years. If the market yield drops by 50 basis points (0.50%), what is the estimated percentage change in the bond's price?",
+                options: ["Decreases by 3.25%", "Increases by 3.25%", "Increases by 6.50%", "Decreases by 0.50%"],
                 answer: 1,
-                explanation: "AMFI (Association of Mutual Funds in India) issues the ARN number to individuals and non-individuals who pass the NISM Series V-A exam to practice distribution."
+                explanation: "Percentage Price Change ≈ -Modified Duration × ΔYield = -6.5 × (-0.50%) = +3.25%."
             },
-
-            // MODULE 4: SCHEME RELATED DOCUMENTS
             {
                 id: 7,
-                module: "Scheme Related Documents",
-                question: "Which document contains operational procedures, sponsor background, statutory details, and key personnel disclosures common to all schemes of a fund house?",
-                options: [
-                    "Scheme Information Document (SID)",
-                    "Statement of Additional Information (SAI)",
-                    "Key Information Memorandum (KIM)",
-                    "Monthly Factsheet"
-                ],
+                module: "Investment Landscape",
+                question: "Treasury Bills (T-Bills) in India are issued by the Reserve Bank of India on behalf of the Central Government in which standard tenors?",
+                options: ["30 days, 60 days, and 90 days", "91 days, 182 days, and 364 days", "180 days, 365 days, and 730 days", "15 days, 45 days, and 91 days"],
                 answer: 1,
-                explanation: "SAI (Statement of Additional Information) contains statutory and background information about the Sponsor, AMC, Trustees, and operational procedures."
+                explanation: "T-Bills are money market instruments issued by the RBI in standard maturities of 91 days, 182 days, and 364 days at a discount to face value."
             },
             {
                 id: 8,
-                module: "Scheme Related Documents",
-                question: "How frequently must the Scheme Information Document (SID) of an existing open-ended scheme be updated?",
-                options: [
-                    "Every month",
-                    "At least once every year",
-                    "Every 3 years",
-                    "Only when new fund offers are launched"
-                ],
+                module: "Investment Landscape",
+                question: "Certificates of Deposit (CDs) are negotiable money market instruments issued primarily by:",
+                options: ["Non-Banking Financial Companies (NBFCs)", "Scheduled Commercial Banks and eligible All-India Financial Institutions", "SEBI-registered stockbrokers", "Primary commodity dealers"],
                 answer: 1,
-                explanation: "SEBI mandates that open-ended schemes must update their SID at least once every year within 3 months from the end of the financial year."
+                explanation: "Certificates of Deposit (CDs) are issued by Scheduled Commercial Banks and select All-India Financial Institutions within RBI guidelines."
             },
             {
                 id: 9,
-                module: "Scheme Related Documents",
-                question: "What concise statutory document is mandatory to be attached along with every Mutual Fund application form?",
-                options: [
-                    "Scheme Information Document (SID)",
-                    "Statement of Additional Information (SAI)",
-                    "Key Information Memorandum (KIM)",
-                    "Annual Audit Report"
-                ],
+                module: "Investment Landscape",
+                question: "An investor seeking to protect purchasing power against inflation over a 15-year horizon should primarily allocate wealth to which asset class?",
+                options: ["Physical cash held in a safe vault", "Bank savings account with daily balance interest", "Diversified equity assets / equity mutual funds", "Overnight debt funds"],
                 answer: 2,
-                explanation: "KIM (Key Information Memorandum) summarizes the key features of SID and SAI and must accompany every application form."
+                explanation: "Equities represent ownership in businesses that can increase revenues and dividends over time, historically beating inflation over long periods."
             },
-
-            // MODULE 5: FUND DISTRIBUTION & CHANNEL MANAGEMENT
             {
                 id: 10,
-                module: "Fund Distribution & Channel Management",
-                question: "What is EUIN and why was it introduced by SEBI?",
-                options: [
-                    "Employee Unique Identification Number to identify individual sales personnel and curb mis-selling.",
-                    "Electronic Unit Issuance Number for demat processing.",
-                    "External Unit Identification Code for non-resident Indian investors.",
-                    "Exchange Unit Index Number for index tracking."
-                ],
-                answer: 0,
-                explanation: "EUIN stands for Employee Unique Identification Number. It tracks the individual salesperson giving advisory or executing sales to fix accountability."
+                module: "Investment Landscape",
+                question: "A credit rating agency assigns a credit rating of 'BBB-' to a company's bond issue. This rating is classified as:",
+                options: ["Highest safety sovereign grade", "The lowest tier within the Investment Grade category", "High speculative default junk grade", "Zero credit risk rating"],
+                answer: 1,
+                explanation: "On the Indian credit rating scale, BBB- is the lowest rating that qualifies as 'Investment Grade'. Ratings below BBB- are speculative/junk."
             },
             {
                 id: 11,
-                module: "Fund Distribution & Channel Management",
-                question: "According to AMFI Code of Conduct, what is 'rebating' and is it allowed?",
-                options: [
-                    "Sharing part of commission with investors; strictly prohibited.",
-                    "Reinvesting commissions into new schemes; encouraged.",
-                    "Charging higher advisory fees; permitted with client consent.",
-                    "Offering free financial advice; mandatory for all distributors."
-                ],
-                answer: 0,
-                explanation: "Rebating means passing back part of the commission to the investor in cash or kind. It is strictly prohibited under the AMFI Code of Conduct."
+                module: "Investment Landscape",
+                question: "The yield curve plots which two variables on a graph for sovereign securities?",
+                options: ["Coupon rate versus Issuer credit rating", "Yield to Maturity (YTM) versus Term to Maturity", "Standard deviation versus Expected alpha", "Nominal interest rate versus Inflation rate"],
+                answer: 1,
+                explanation: "A yield curve plots interest yields of bonds of equal credit quality against their differing maturity tenors."
             },
             {
                 id: 12,
-                module: "Fund Distribution & Channel Management",
-                question: "What model of commission payout is permissible for mutual fund distributors under SEBI guidelines?",
+                module: "Investment Landscape",
+                question: "Which statement regarding Sovereign Gold Bonds (SGBs) compared to physical gold is correct?",
                 options: [
-                    "Upfront commission paid entirely by AMC from scheme assets.",
-                    "Full Trail Commission model only, paid as a percentage of lingering AUM.",
-                    "Upfront incentive plus guaranteed returns bonus.",
-                    "Flat fixed monthly retainer paid by SEBI."
+                    "SGBs incur making charges, locker storage fees, and GST on purchase.",
+                    "SGBs provide a fixed annual interest coupon in addition to tracking gold prices.",
+                    "SGBs are completely illiquid and cannot be traded on stock exchanges.",
+                    "Physical gold delivers an assured periodic cash interest payout while SGB does not."
                 ],
                 answer: 1,
-                explanation: "SEBI mandated an all-trail commission model for distributors to eliminate upfront commission distortion and mis-selling."
+                explanation: "SGBs pay periodic interest coupons on the initial investment amount and eliminate storage/purity friction."
             },
-
-            // MODULE 6: NAV, EXPENSE RATIO & CUT-OFF TIMING
             {
                 id: 13,
-                module: "NAV, Expense Ratio & Cut-Off",
-                question: "A scheme has Total Market Value of Assets = ₹1,200 Crores, Total Liabilities = ₹100 Crores, and Outstanding Units = 10 Crores. What is its NAV?",
-                options: [
-                    "₹110.00",
-                    "₹120.00",
-                    "₹100.00",
-                    "₹130.00"
-                ],
-                answer: 0,
-                explanation: "NAV = (Total Assets - Total Liabilities) / Outstanding Units = (1,200 - 100) Crores / 10 Crores = ₹1,100 Cr / 10 Cr = ₹110.00."
+                module: "Investment Landscape",
+                question: "The difference in yield between a 10-year corporate bond and a 10-year Government benchmark security is termed the:",
+                options: ["Macaulay spread", "Credit spread / Yield spread", "Turnover margin", "Tracking error"],
+                answer: 1,
+                explanation: "The credit spread represents the risk premium required by investors to take on corporate credit default risk over risk-free G-Secs."
             },
             {
                 id: 14,
-                module: "NAV, Expense Ratio & Cut-Off",
-                question: "What is the cut-off timing for applicability of NAV for purchase transactions in Liquid and Overnight funds to get previous business day's NAV?",
+                module: "Investment Landscape",
+                question: "What is a primary liquidity drawback of investing directly in physical real estate?",
                 options: [
-                    "3:00 PM",
-                    "1:30 PM",
-                    "2:00 PM",
-                    "12:00 Noon"
+                    "Prices are marked-to-market twice every day.",
+                    "Transactions require substantial time, legal due diligence, title search, and high transaction costs.",
+                    "Real estate carries a sovereign buy-back guarantee.",
+                    "Units can be redeemed instantly via an ATM card."
                 ],
                 answer: 1,
-                explanation: "The official cut-off time for subscription in Liquid and Overnight funds (subject to funds realization before cut-off) is 1:30 PM."
+                explanation: "Physical real estate suffers from high transaction costs, illiquidity, legal complexity, and indivisibility."
             },
             {
                 id: 15,
-                module: "NAV, Expense Ratio & Cut-Off",
-                question: "For equity schemes, what rule applies regarding funds realization and NAV allotment for purchases equal to or exceeding ₹2 Lakhs?",
-                options: [
-                    "NAV of the day application is submitted regardless of realization.",
-                    "NAV of the business day on which funds are actually realized and credited to scheme account before cut-off.",
-                    "NAV of the next month's first working day.",
-                    "NAV guaranteed at previous week's closing price."
-                ],
+                module: "Investment Landscape",
+                question: "An investor who cannot tolerate any nominal drop in capital over a 15-day period should invest in:",
+                options: ["Sectoral Technology Equity Fund", "Overnight Fund / Liquid Fund", "Credit Risk Debt Fund", "Mid Cap Equity Fund"],
                 answer: 1,
-                explanation: "SEBI rules state that uniform NAV applicability across all purchase transactions (regardless of amount) requires actual realization of funds into the scheme account before cut-off time."
+                explanation: "Overnight and liquid funds invest in debt instruments with residual maturities of up to 1 day and 91 days respectively, offering maximum safety."
             },
             {
                 id: 16,
-                module: "NAV, Expense Ratio & Cut-Off",
-                question: "Where is the Exit Load collected from redeeming investors credited?",
-                options: [
-                    "Retained as profit by the Asset Management Company.",
-                    "Paid as special bonus to distributor.",
-                    "Credited back to the scheme assets for unitholder benefit.",
-                    "Transferred to SEBI Investor Protection Fund."
-                ],
+                module: "Investment Landscape",
+                question: "Which economic indicator measures the monetary value of all finished goods and services produced within a nation over a period?",
+                options: ["Current Account Deficit (CAD)", "Fiscal Deficit (FD)", "Gross Domestic Product (GDP)", "Index of Industrial Production (IIP)"],
                 answer: 2,
-                explanation: "Exit load collected from unitholders redeeming early must be credited entirely back to the respective scheme's portfolio."
+                explanation: "Gross Domestic Product (GDP) quantifies the monetary value of all final goods and services produced inside a country in a given period."
             },
-
-            // MODULE 7: TAXATION & ACCOUNTING
             {
                 id: 17,
-                module: "Taxation & Accounting",
-                question: "To qualify as an Equity-Oriented Mutual Fund scheme for tax purposes in India, what minimum percentage of total assets must be invested in domestic equity shares?",
+                module: "Investment Landscape",
+                question: "When an investor buys an equity share on a stock exchange, the investor becomes:",
                 options: [
-                    "50%",
-                    "65%",
-                    "80%",
-                    "75%"
+                    "A secured creditor entitled to guaranteed interest",
+                    "A part owner (shareholder) bearing residual risk and rewards",
+                    "A trustee of the enterprise's provident fund",
+                    "A debenture holder with primary charge on assets"
                 ],
                 answer: 1,
-                explanation: "To enjoy equity taxation treatment, a fund must invest a minimum of 65% of its total assets in equity shares of domestic listed Indian companies."
+                explanation: "Equity shares confer ownership, entitling holders to residual profits and assets after meeting all debt liabilities."
             },
+
+            // =========================================================
+            // MODULE 2: CONCEPT & ROLE OF MUTUAL FUNDS (Q18 - Q34)
+            // =========================================================
             {
                 id: 18,
-                module: "Taxation & Accounting",
-                question: "What rate of uniform Stamp Duty is applicable on fresh purchases, SIP installments, and STP-in transfers of mutual fund units?",
-                options: [
-                    "0.005%",
-                    "0.015%",
-                    "0.1%",
-                    "0.05%"
-                ],
-                answer: 0,
-                explanation: "A uniform stamp duty rate of 0.005% is applicable on investment amount (net of charges) for purchase/subscription of mutual fund units."
+                module: "Concept & Role of Mutual Funds",
+                question: "Under which statutory law is a Mutual Fund required to be established as a Trust in India?",
+                options: ["The Companies Act, 2013", "The Indian Trusts Act, 1882", "The Banking Regulation Act, 1949", "The Securities Contracts (Regulation) Act, 1956"],
+                answer: 1,
+                explanation: "Mutual funds in India are set up as trusts under the Indian Trusts Act, 1882, with unitholders as the beneficiaries."
             },
             {
                 id: 19,
-                module: "Taxation & Accounting",
-                question: "What is the holding period required for Equity Mutual Fund units to qualify for Long-Term Capital Gains (LTCG) tax?",
-                options: [
-                    "More than 12 months",
-                    "More than 24 months",
-                    "More than 36 months",
-                    "More than 6 months"
-                ],
-                answer: 0,
-                explanation: "For equity-oriented schemes, holding units for more than 12 months classifies capital gains as Long-Term Capital Gains (LTCG)."
+                module: "Concept & Role of Mutual Funds",
+                question: "Who holds electronic and physical custody of portfolio securities purchased by a mutual fund scheme?",
+                options: ["The Asset Management Company (AMC)", "The Board of Trustees", "An independent SEBI-registered Custodian", "The Registrar and Transfer Agent (RTA)"],
+                answer: 2,
+                explanation: "A SEBI-registered independent Custodian holds the portfolio assets in safe custody to prevent misuse by the AMC."
             },
-
-            // MODULE 8: INVESTOR SERVICES
             {
                 id: 20,
-                module: "Investor Services",
-                question: "What does CKYC stand for in the context of investor onboarding in India?",
-                options: [
-                    "Centralized Know Your Customer",
-                    "Central Know Your Customer Registry",
-                    "Corporate Know Your Customer",
-                    "Certified Verification Code"
-                ],
-                answer: 1,
-                explanation: "CKYC stands for Central Know Your Customer Registry, managed by CERSAI to centralize KYC records across all financial institutions."
+                module: "Concept & Role of Mutual Funds",
+                question: "The promoter who conceives the mutual fund, provides initial capital, and applies to SEBI for registration is the:",
+                options: ["Fund Manager", "Chief Executive Officer of AMC", "Sponsor", "Statutory Auditor"],
+                answer: 2,
+                explanation: "The Sponsor acts as the promoter of the mutual fund trust, establishes the trust deed, and appoints the trustees."
             },
             {
                 id: 21,
-                module: "Investor Services",
-                question: "How many maximum nominees can an individual unitholder specify for a mutual fund folio?",
+                module: "Concept & Role of Mutual Funds",
+                question: "What is the primary function of a Registrar and Transfer Agent (RTA) like CAMS or KFintech?",
                 options: [
-                    "1 nominee",
-                    "2 nominees",
-                    "3 nominees",
-                    "5 nominees"
+                    "Deciding which equity stocks to buy and sell every morning",
+                    "Processing investor purchase/redemption requests, maintaining folios, and issuing statements",
+                    "Underwriting IPO share issues",
+                    "Guaranteeing fixed annual yields on hybrid funds"
                 ],
-                answer: 2,
-                explanation: "Individual unitholders can designate up to 3 nominees per folio and allocate percentage shares among them."
+                answer: 1,
+                explanation: "RTAs maintain unitholder registers, process subscriptions, execute redemptions, and issue account statements."
             },
             {
                 id: 22,
-                module: "Investor Services",
-                question: "Which facility enables periodic automated transfers of fixed amounts from a source scheme to a target scheme within the same AMC?",
+                module: "Concept & Role of Mutual Funds",
+                question: "An open-ended mutual fund scheme differs from a closed-ended scheme because:",
                 options: [
-                    "SIP (Systematic Investment Plan)",
-                    "SWP (Systematic Withdrawal Plan)",
-                    "STP (Systematic Transfer Plan)",
-                    "Switch Facility"
+                    "It has a fixed maturity date after which it automatically liquidates.",
+                    "It allows unitholders to buy and redeem units continuously on all business days at NAV-related prices.",
+                    "Units can never be redeemed before completing 7 years.",
+                    "It is mandated to invest only in overseas equities."
                 ],
-                answer: 2,
-                explanation: "STP (Systematic Transfer Plan) automates redemption from a source scheme (e.g. Liquid) and subscription into a target scheme (e.g. Equity) at regular intervals."
+                answer: 1,
+                explanation: "Open-ended funds do not have a maturity date and offer continuous entry and exit at NAV-based prices on business days."
             },
-
-            // MODULE 9: SCHEME CATEGORIZATION
             {
                 id: 23,
-                module: "Scheme Categorization",
-                question: "According to SEBI Scheme Categorization rules, a 'Large Cap Fund' must invest at least what percentage of total assets in Large Cap companies?",
-                options: [
-                    "65%",
-                    "70%",
-                    "80%",
-                    "90%"
-                ],
-                answer: 2,
-                explanation: "Large Cap Funds must invest a minimum of 80% of total assets in equity shares of top 100 companies by market capitalization."
+                module: "Concept & Role of Mutual Funds",
+                question: "Which document represents the formal legal contract between the Trustees and the Asset Management Company (AMC)?",
+                options: ["The Trust Deed", "The Investment Management Agreement (IMA)", "The Memorandum of Association", "The Key Information Memorandum"],
+                answer: 1,
+                explanation: "The Investment Management Agreement (IMA) is entered into between Trustees and the AMC, empowering the AMC to manage fund assets."
             },
             {
                 id: 24,
-                module: "Scheme Categorization",
-                question: "In a Multi Cap Fund, SEBI mandates minimum asset allocation across equity tiers as:",
-                options: [
-                    "Minimum 65% total in equity without sub-limits.",
-                    "Minimum 25% in Large Cap, 25% in Mid Cap, and 25% in Small Cap.",
-                    "Minimum 80% in Large Cap and 20% in Mid Cap.",
-                    "Minimum 50% in Large Cap and 50% in Debt."
-                ],
+                module: "Concept & Role of Mutual Funds",
+                question: "Can an Asset Management Company (AMC) act as a Trustee of another mutual fund?",
+                options: ["Yes, if SEBI gives written approval", "No, SEBI regulations strictly prohibit an AMC from acting as a trustee of any mutual fund", "Yes, provided its net worth exceeds ₹100 Crores", "Yes, for closed-ended debt funds only"],
                 answer: 1,
-                explanation: "SEBI mandates Multi Cap Funds to maintain at least 75% in equity, with strict minimum 25% each in Large Cap, Mid Cap, and Small Cap stocks."
+                explanation: "To prevent conflicts of interest, SEBI Mutual Funds Regulations prohibit an AMC from serving as a trustee of any mutual fund."
             },
             {
                 id: 25,
-                module: "Scheme Categorization",
-                question: "An Arbitrage Fund is classified under which primary SEBI scheme category?",
+                module: "Concept & Role of Mutual Funds",
+                question: "How are the unitholders of a mutual fund legally positioned with respect to scheme assets?",
                 options: [
-                    "Debt Schemes",
-                    "Hybrid Schemes",
-                    "Solution Oriented Schemes",
-                    "Index Schemes"
+                    "Direct lenders to the AMC holding secured debentures",
+                    "Beneficial owners of the scheme's assets in proportion to the units held",
+                    "Partners in the asset management firm",
+                    "Subordinated unsecured creditors"
                 ],
                 answer: 1,
-                explanation: "Arbitrage Funds are categorized under Hybrid Schemes, exploiting price differentials between spot and futures markets while keeping equity tax benefits."
+                explanation: "Investors are the beneficial owners of the trust's pool of assets in proportion to their unit holdings."
             },
-
-            // MODULE 10: RISK, RETURN & PERFORMANCE
             {
                 id: 26,
-                module: "Risk, Return & Performance",
-                question: "Which risk metric measures total portfolio volatility using dispersion of returns around mean?",
+                module: "Concept & Role of Mutual Funds",
+                question: "What is an 'Interval Scheme' in mutual fund categorization?",
                 options: [
-                    "Beta",
-                    "Standard Deviation",
-                    "Sharpe Ratio",
-                    "Alpha"
+                    "A scheme that trades only during stock exchange opening auctions",
+                    "A scheme that operates primarily as closed-ended but opens for transactions during pre-disclosed intervals",
+                    "A scheme that permits investments only on the first day of every month",
+                    "A scheme that switches between debt and equity daily"
                 ],
                 answer: 1,
-                explanation: "Standard Deviation measures total risk (both systematic and unsystematic) by measuring dispersion of historical returns around mean."
+                explanation: "Interval funds combine closed-ended and open-ended characteristics, opening for purchase and redemption during specified intervals."
             },
             {
                 id: 27,
-                module: "Risk, Return & Performance",
-                question: "What does a Beta value of 1.2 indicate for an Equity Mutual Fund scheme?",
+                module: "Concept & Role of Mutual Funds",
+                question: "Are mutual funds in India permitted to offer guaranteed returns on equity schemes?",
                 options: [
-                    "The scheme is 20% less volatile than the benchmark index.",
-                    "The scheme is expected to move 20% more aggressively than the market benchmark.",
-                    "The scheme has zero market risk.",
-                    "The scheme generates 1.2% guaranteed quarterly return."
+                    "Yes, all Large Cap schemes guarantee 12% per annum.",
+                    "No scheme can offer guaranteed returns unless explicitly assured by the Sponsor with full reserves approved by SEBI.",
+                    "Yes, if the fund manager has over 20 years of market experience.",
+                    "Yes, if the investor locks in funds for 10 years."
                 ],
                 answer: 1,
-                explanation: "Beta measures market systematic risk. A Beta of 1.2 means if the market benchmark moves by 10%, the scheme tends to move by 12% in the same direction."
+                explanation: "SEBI regulations prohibit guaranteed returns unless guaranteed by the sponsor and disclosed in offer documents."
             },
             {
                 id: 28,
-                module: "Risk, Return & Performance",
-                question: "Which formula defines the Sharpe Ratio of a mutual fund portfolio?",
+                module: "Concept & Role of Mutual Funds",
+                question: "Which of the following illustrates an active management style in mutual fund investing?",
                 options: [
-                    "(Fund Return - Risk Free Rate) / Beta",
-                    "(Fund Return - Risk Free Rate) / Standard Deviation",
-                    "(Benchmark Return - Fund Return) / Tracking Error",
-                    "(Fund Return - Benchmark Return) / Portfolio Value"
+                    "Replicating the 50 stocks of the Nifty 50 Index in exact index weights",
+                    "Selecting stocks based on fundamental research and forecasting to generate excess alpha over the benchmark",
+                    "Holding 100% cash in overnight reverse repo",
+                    "Investing solely in gold bullion to match spot rates"
                 ],
                 answer: 1,
-                explanation: "Sharpe Ratio = (Portfolio Return - Risk Free Rate) / Standard Deviation. It quantifies excess return earned per unit of total risk."
+                explanation: "Active management relies on manager discretion, security analysis, and market timing to outperform a benchmark."
             },
-
-            // MODULE 11: FINANCIAL PLANNING & ASSET ALLOCATION
             {
                 id: 29,
-                module: "Financial Planning & Asset Allocation",
-                question: "What is the main objective of Strategic Asset Allocation?",
+                module: "Concept & Role of Mutual Funds",
+                question: "Exchange Traded Funds (ETFs) differ from open-ended index mutual funds primarily because:",
                 options: [
-                    "Market timing to trade stocks daily.",
-                    "Aligning long-term asset mix with investor risk tolerance and financial goals.",
-                    "Avoiding all equity investments permanently.",
-                    "Maximizing tax refunds regardless of risk."
+                    "ETFs have zero tracking error.",
+                    "ETFs trade real-time throughout market hours on stock exchange trading terminals like shares.",
+                    "ETFs do not require a demat account for execution.",
+                    "ETFs do not declare end-of-day NAV."
                 ],
                 answer: 1,
-                explanation: "Strategic Asset Allocation sets a long-term target allocation across equities, debt, and cash to meet investor goals while adhering to risk capacity."
+                explanation: "ETFs trade real-time on stock exchanges at continuous market prices and require a demat and trading account."
             },
             {
                 id: 30,
-                module: "Ethics & Code of Conduct",
-                question: "When recommending mutual fund products, a distributor must prioritize:",
+                module: "Concept & Role of Mutual Funds",
+                question: "The statutory auditor appointed to audit a mutual fund scheme is appointed by:",
+                options: ["The Managing Director of the AMC", "The Board of Trustees", "The Association of Mutual Funds in India (AMFI)", "The Custodian bank"],
+                answer: 1,
+                explanation: "Trustees hold fiduciary responsibility to appoint independent statutory auditors for the mutual fund schemes."
+            },
+            {
+                id: 31,
+                module: "Concept & Role of Mutual Funds",
+                question: "Can the statutory auditor of an AMC also be appointed as the statutory auditor of the mutual fund schemes managed by that AMC?",
                 options: [
-                    "The scheme paying highest trail commission.",
-                    "The suitability of the scheme to the client's financial goals and risk profile.",
-                    "Promoting new fund offers (NFOs) only.",
-                    "Distributing schemes of a single AMC sponsor."
+                    "Yes, it is encouraged for cost efficiency.",
+                    "No, SEBI regulations mandate that scheme auditors must be completely independent of the AMC's corporate auditor.",
+                    "Yes, if approved by AMFI.",
+                    "Yes, for liquid and overnight funds only."
                 ],
                 answer: 1,
-                explanation: "The AMFI Code of Conduct mandates distributor suitability — products recommended must align with client risk capacity and goals."
-            }
-        ];
-
-        // Generate additional 70 authentic practice questions across official modules to form 100+ master pool
-        const moduleTitles = [
-            "Concept & Role of Mutual Funds", "Legal & Regulatory Framework", 
-            "Scheme Related Documents", "Scheme Categorization", 
-            "NAV, Expense Ratio & Cut-Off", "Fund Distribution & Channel Management", 
-            "Taxation & Accounting", "Investor Services", 
-            "Risk, Return & Performance", "Financial Planning & Asset Allocation",
-            "Ethics & Code of Conduct"
-        ];
-
-        for (let i = 31; i <= 100; i++) {
-            const mod = moduleTitles[i % moduleTitles.length];
-            
-            let qText = "";
-            let opts = [];
-            let ans = 0;
-            let exp = "";
-
-            if (i % 5 === 0) {
-                qText = `Under ${mod} regulations, which entity is primarily accountable for investor grievance redressal in a scheme?`;
-                opts = [
-                    "Asset Management Company (AMC) and Trustees",
-                    "Reserve Bank of India",
-                    "Stock Exchange Brokers",
-                    "External Auditors"
-                ];
-                ans = 0;
-                exp = `The AMC and its Board of Trustees hold primary responsibility for unitholder service quality and grievance resolution under SEBI regulations.`;
-            } else if (i % 5 === 1) {
-                qText = `In ${mod}, what is the impact of an increase in Total Expense Ratio (TER) on a scheme's Net Asset Value (NAV)?`;
-                opts = [
-                    "NAV increases proportionately",
-                    "NAV decreases because expenses are deducted daily from net assets",
-                    "NAV remains totally unchanged",
-                    "NAV gets locked for 30 days"
+                explanation: "To prevent conflicts of interest, the scheme auditor cannot be the auditor of the AMC."
+            },
+            {
+                id: 32,
+                module: "Concept & Role of Mutual Funds",
+                question: "What is the primary objective of a 'Fund of Funds' (FoF) scheme?",
+                options: [
+                    "To lend money to start-up asset management companies",
+                    "To invest portfolio assets into units of other mutual fund schemes rather than directly into stocks or bonds",
+                    "To underwrite government bond auctions",
+                    "To manage bank fixed deposits exclusively"
                 ],
-                ans = 1;
-                exp = `Scheme expenses are accrued daily. Higher TER reduces daily net asset growth, thereby lowering the Net Asset Value (NAV).`;
-            } else if (i % 5 === 2) {
-                qText = `Regarding ${mod}: What does 'Tracking Error' signify in an Index Fund or ETF?`;
-                opts = [
-                    "Annualized standard deviation of return differences between the fund and benchmark index",
-                    "Delay in downloading statement of account",
-                    "Difference in brokerage commissions paid across brokers",
-                    "Error made during physical application processing"
-                ];
-                ans = 0;
-                exp = `Tracking Error evaluates how closely an index fund mirrors its benchmark. Lower tracking error indicates tighter index replication.`;
-            } else if (i % 5 === 3) {
-                qText = `Under SEBI norms for ${mod}, what is the maximum exit load period allowed for Liquid Mutual Fund schemes?`;
-                opts = [
-                    "Graduated exit load up to 7 days from allotment; zero exit load after Day 7",
-                    "30 days fixed exit load",
-                    "1 year flat 1% exit load",
-                    "No exit load permitted ever"
-                ];
-                ans = 0;
-                exp = `Liquid funds feature a structured 7-day exit load grid (highest on Day 1, tapering to 0% after 7 days) to deter hot speculative money.`;
-            } else {
-                qText = `In context of ${mod}, which of the following statements is TRUE regarding Systematic Investment Plans (SIP)?`;
-                opts = [
-                    "SIP enforces rupee cost averaging by buying more units at lower NAV and fewer at higher NAV",
-                    "SIP guarantees fixed capital appreciation regardless of market downturns",
-                    "SIP requires minimum investment of ₹1 Lakh per month",
-                    "SIP can only be executed in closed-ended debt schemes"
-                ];
-                ans = 0;
-                exp = `SIP operates on Rupee Cost Averaging, enabling investors to accumulate more units when prices dip and fewer when prices rise.`;
-            }
+                answer: 1,
+                explanation: "A Fund of Funds (FoF) invests in units of other domestic or international mutual fund schemes."
+            },
+            {
+                id: 33,
+                module: "Concept & Role of Mutual Funds",
+                question: "What economic benefit does 'pooling of funds' provide to retail investors?",
+                options: [
+                    "Guaranteed capital protection from the government",
+                    "Access to professional portfolio management and diversification with small ticket investments (e.g. ₹500 SIP)",
+                    "Total exemption from all income tax liabilities forever",
+                    "Direct voting rights on company boards"
+                ],
+                answer: 1,
+                explanation: "Pooling lets small retail investors participate in a diversified, professionally managed portfolio that would otherwise require large capital."
+            },
+            {
+                id: 34,
+                module: "Concept & Role of Mutual Funds",
+                question: "If a scheme's total market value of assets is ₹2,200 Crores, liabilities are ₹200 Crores, and there are 10 Crore units outstanding, what is the NAV?",
+                options: ["₹220.00", "₹200.00", "₹20.00", "₹240.00"],
+                answer: 1,
+                explanation: "NAV = (Total Assets - Liabilities) / Units = (2200 - 200) / 10 = ₹200.00."
+            },
 
-            MASTER_QUESTION_BANK.push({
-                id: i,
-                module: mod,
-                question: qText,
-                options: opts,
-                answer: ans,
-                explanation: exp
-            });
-        }
+            // =========================================================
+            // MODULE 3: LEGAL & REGULATORY FRAMEWORK (Q35 - Q51)
+            // =========================================================
+            {
+                id: 35,
+                module: "Legal & Regulatory Framework",
+                question: "Under SEBI (Mutual Funds) Regulations, 1996, what is the mandatory minimum continuous net worth required for an Asset Management Company (AMC)?",
+                options: ["₹10 Crores", "₹25 Crores", "₹50 Crores", "₹100 Crores"],
+                answer: 2,
+                explanation: "SEBI regulations stipulate that an AMC must maintain a continuous minimum net worth of ₹50 Crores."
+            },
+            {
+                id: 36,
+                module: "Legal & Regulatory Framework",
+                question: "What minimum proportion of the Board of Trustees must be independent (unassociated with the sponsor)?",
+                options: ["At least 33% (one-third)", "At least 50% (half)", "At least 66.67% (two-thirds)", "100% (all)"],
+                answer: 2,
+                explanation: "At least two-thirds (66.67%) of the trustees must be independent to ensure unitholder interests are protected without sponsor bias."
+            },
+            {
+                id: 37,
+                module: "Legal & Regulatory Framework",
+                question: "What minimum proportion of the Board of Directors of an Asset Management Company (AMC) must be independent directors?",
+                options: ["At least 25%", "At least 50%", "At least 66.67%", "At least 75%"],
+                answer: 1,
+                explanation: "SEBI regulations require that at least 50% of the directors on an AMC board must be independent."
+            },
+            {
+                id: 38,
+                module: "Legal & Regulatory Framework",
+                question: "According to SEBI investment restrictions, an open-ended mutual fund scheme cannot invest more than what percentage of its NAV in unlisted equity shares?",
+                options: ["5% of NAV", "10% of NAV", "0% (Completely prohibited)", "2.5% of NAV"],
+                answer: 2,
+                explanation: "SEBI completely prohibits open-ended mutual fund schemes from investing in unlisted equity shares to protect scheme liquidity."
+            },
+            {
+                id: 39,
+                module: "Legal & Regulatory Framework",
+                question: "What is the single issuer debt exposure ceiling for a mutual fund scheme investing in rated investment grade debt securities of a corporate issuer?",
+                options: [
+                    "5% of NAV unconditionally",
+                    "10% of NAV (extendable to 12% of NAV with prior approval of Trustees and AMC)",
+                    "25% of NAV across all schemes",
+                    "50% of NAV for AAA rated entities"
+                ],
+                answer: 1,
+                explanation: "SEBI caps investment in debt instruments of a single issuer at 10% of NAV, extendable up to 12% of NAV with prior trustee approval."
+            },
+            {
+                id: 40,
+                module: "Legal & Regulatory Framework",
+                question: "The Association of Mutual Funds in India (AMFI) functions primarily as:",
+                options: [
+                    "A statutory court with criminal prosecuting powers",
+                    "A non-profit industry association of SEBI-registered mutual funds promoting ethical standards",
+                    "A sovereign wealth board under the Ministry of Finance",
+                    "A department of the Reserve Bank of India"
+                ],
+                answer: 1,
+                explanation: "AMFI is an industry association that sets professional codes, registers distributors (ARN), and represents mutual funds."
+            },
+            {
+                id: 41,
+                module: "Legal & Regulatory Framework",
+                question: "Which regulatory authority governs Money Market instruments, Government Securities, and Call Money transactions in India?",
+                options: ["Securities and Exchange Board of India (SEBI)", "Reserve Bank of India (RBI)", "Insurance Regulatory and Development Authority (IRDAI)", "Pension Fund Regulatory and Development Authority (PFRDA)"],
+                answer: 1,
+                explanation: "The Reserve Bank of India (RBI) regulates the banking system, government securities market, and money market instruments."
+            },
+            {
+                id: 42,
+                module: "Legal & Regulatory Framework",
+                question: "Under SEBI regulations, how much of its own funds must an AMC invest as 'Skin in the Game' in its schemes?",
+                options: [
+                    "A flat ₹1 Crore in every equity scheme",
+                    "A risk-based percentage of AUM as mandatory seed capital based on scheme risk profile",
+                    "Skin in the game is completely optional in India",
+                    "Zero capital is required once the NFO closes"
+                ],
+                answer: 1,
+                explanation: "SEBI mandates AMCs to invest a minimum percentage of AUM (based on scheme risk) as skin in the game."
+            },
+            {
+                id: 43,
+                module: "Legal & Regulatory Framework",
+                question: "Can a mutual fund scheme borrow funds to purchase speculative equity shares to boost returns?",
+                options: [
+                    "Yes, up to 50% of NAV",
+                    "No, schemes can borrow only for temporary liquidity needs like redemptions, capped at 20% of net assets for max 6 months",
+                    "Yes, during market crashes with trustee permission",
+                    "Yes, up to the value of its uncalled capital"
+                ],
+                answer: 1,
+                explanation: "Mutual funds can borrow solely for temporary liquidity mismatches (redemptions/dividends) up to 20% of net assets for a maximum of 6 months."
+            },
+            {
+                id: 44,
+                module: "Legal & Regulatory Framework",
+                question: "What is the maximum investment an actively managed mutual fund scheme can make in equity shares of a single company?",
+                options: ["5% of NAV", "10% of NAV", "20% of NAV", "15% of NAV"],
+                answer: 1,
+                explanation: "SEBI regulations cap single company equity exposure at 10% of scheme NAV (excluding index and sector funds)."
+            },
+            {
+                id: 45,
+                module: "Legal & Regulatory Framework",
+                question: "To be eligible as a Sponsor of a mutual fund, the entity must have been in the financial services business for at least:",
+                options: ["1 year", "3 years", "5 years", "10 years"],
+                answer: 2,
+                explanation: "SEBI requires the sponsor to have been in financial services for at least 5 years with a sound track record."
+            },
+            {
+                id: 46,
+                module: "Legal & Regulatory Framework",
+                question: "The Sponsor must have a net worth that is positive in all 5 preceding years and profits after tax in at least how many out of 5 years?",
+                options: ["1 year", "2 years", "3 years", "5 years"],
+                answer: 2,
+                explanation: "The sponsor must have generated net profit after tax in at least 3 out of the preceding 5 financial years."
+            },
+            {
+                id: 47,
+                module: "Legal & Regulatory Framework",
+                question: "How frequently are Trustees required to review transactions between the mutual fund scheme and the AMC's associates/affiliates?",
+                options: ["Every 5 years", "At least quarterly", "Once a decade", "Only when a complaint is filed"],
+                answer: 1,
+                explanation: "Trustees must periodically review associate transactions (brokerage, underwriting, commissions) at least on a quarterly basis."
+            },
+            {
+                id: 48,
+                module: "Legal & Regulatory Framework",
+                question: "SEBI regulations prohibit a mutual fund scheme from investing in which of the following?",
+                options: [
+                    "Treasury bills issued by the RBI",
+                    "Any security issued by an associate or group company of the sponsor in excess of regulatory limits",
+                    "Listed AAA rated public sector bonds",
+                    "Exchange-traded equity derivatives for hedging"
+                ],
+                answer: 1,
+                explanation: "SEBI restricts investments in securities of sponsor group companies and completely bars unlisted securities of sponsor group companies."
+            },
+            {
+                id: 49,
+                module: "Legal & Regulatory Framework",
+                question: "Which body has the statutory authority to revoke the registration of an Asset Management Company in India?",
+                options: ["AMFI", "SEBI", "BSE & NSE Joint Committee", "Indian Banks' Association (IBA)"],
+                answer: 1,
+                explanation: "SEBI is the statutory regulator empowered under the SEBI Act to suspend or cancel registrations of intermediaries."
+            },
+            {
+                id: 50,
+                module: "Legal & Regulatory Framework",
+                question: "A mutual fund scheme cannot advance corporate loans directly to any corporate entity. This statement is:",
+                options: ["True, mutual funds are prohibited from advancing loans", "False, mutual funds can lend up to 50% of AUM", "True only for equity schemes; debt schemes can grant term loans", "False, provided interest is 2% above repo rate"],
+                answer: 0,
+                explanation: "Mutual funds are investment vehicles and are strictly prohibited from lending money or advancing loans directly to corporate entities."
+            },
+            {
+                id: 51,
+                module: "Legal & Regulatory Framework",
+                question: "Who holds the fiduciary responsibility to act in the sole interest of mutual fund unitholders and ensure compliance with SEBI rules?",
+                options: ["Stock exchange clearing house", "The Board of Trustees", "External marketing distributors", "The custodian's depository participant"],
+                answer: 1,
+                explanation: "The Trustees hold fiduciary responsibility to protect the assets and interests of unitholders."
+            },
+
+            // =========================================================
+            // MODULE 4: SCHEME RELATED DOCUMENTS (Q52 - Q68)
+            // =========================================================
+            {
+                id: 52,
+                module: "Scheme Related Documents",
+                question: "Which statutory document contains specific investment objectives, asset allocation patterns, risk factors, and fees of a particular mutual fund scheme?",
+                options: ["Statement of Additional Information (SAI)", "Scheme Information Document (SID)", "Key Information Memorandum (KIM)", "Audited Annual Balance Sheet of AMC"],
+                answer: 1,
+                explanation: "The SID (Scheme Information Document) details scheme-specific information including objective, allocation, strategy, and risk factors."
+            },
+            {
+                id: 53,
+                module: "Scheme Related Documents",
+                question: "Where are statutory disclosures regarding the Sponsor, Trustees, AMC's key personnel, associates, and legal terms consolidated?",
+                options: ["Scheme Information Document (SID)", "Statement of Additional Information (SAI)", "Monthly Scheme Portfolio Factsheet", "Fund Manager Biography"],
+                answer: 1,
+                explanation: "The SAI (Statement of Additional Information) contains statutory background information common across all schemes of the mutual fund."
+            },
+            {
+                id: 54,
+                module: "Scheme Related Documents",
+                question: "What concise document summarizing the core features of SID and SAI must legally be attached to every mutual fund application form?",
+                options: ["Key Information Memorandum (KIM)", "Trust Deed Summary", "Fund Factsheet", "Central KYC Form"],
+                answer: 0,
+                explanation: "SEBI regulations mandate that every application form must be accompanied by the Key Information Memorandum (KIM)."
+            },
+            {
+                id: 55,
+                module: "Scheme Related Documents",
+                question: "How frequently must the Scheme Information Document (SID) of an existing open-ended scheme be updated and filed with SEBI?",
+                options: ["Every quarter", "At least once every financial year within 3 months of year end", "Every 5 years", "Only when the fund manager changes"],
+                answer: 1,
+                explanation: "SIDs of open-ended schemes must be updated at least once every financial year within 3 months of the financial year close."
+            },
+            {
+                id: 56,
+                module: "Scheme Related Documents",
+                question: "If an AMC introduces a 'Fundamental Attribute Change' in an existing scheme, existing unitholders must be given an exit window without exit load for at least:",
+                options: ["7 calendar days", "15 calendar days", "30 calendar days", "60 calendar days"],
+                answer: 2,
+                explanation: "Unitholders must be given a written notice and a 30-day exit period at prevailing NAV without exit load whenever fundamental attributes change."
+            },
+            {
+                id: 57,
+                module: "Scheme Related Documents",
+                question: "Which monthly publication issued by an AMC provides unitholders with full portfolio holdings, sector weights, YTM, duration, and fund manager track record?",
+                options: ["Monthly Fund Factsheet", "Key Information Memorandum", "Annual Trust Deed", "CKYC Directory"],
+                answer: 0,
+                explanation: "The Monthly Factsheet provides visibility into scheme holdings, top 10 stocks/bonds, sector concentration, and risk metrics."
+            },
+            {
+                id: 58,
+                module: "Scheme Related Documents",
+                question: "What is a 'Notice-cum-Addendum' published by an AMC?",
+                options: [
+                    "A legal court summons served on a unitholder",
+                    "A formal statutory notice informing investors of interim changes to SID, SAI, or KIM",
+                    "An internal memo shared between fund managers",
+                    "A tax receipt issued at the end of the year"
+                ],
+                answer: 1,
+                explanation: "Notice-cum-Addendum is a statutory notice informing investors and the public of significant modifications to offer documents."
+            },
+            {
+                id: 59,
+                module: "Scheme Related Documents",
+                question: "The graphical pictorial depiction indicating the level of risk of a mutual fund scheme on a 6-tier meter is called the:",
+                options: ["Volatometer", "Risk-o-meter", "Sharpe Gauge", "Duration Indicator"],
+                answer: 1,
+                explanation: "The Risk-o-meter depicts risk on a 6-level scale: Low, Low to Moderate, Moderate, Moderately High, High, and Very High."
+            },
+            {
+                id: 60,
+                module: "Scheme Related Documents",
+                question: "How frequently must an AMC evaluate and update the Risk-o-meter level of its schemes based on portfolio holdings?",
+                options: ["Every business day", "On a monthly basis within 10 days of month-end", "Annually", "Only during the NFO"],
+                answer: 1,
+                explanation: "AMCs must evaluate and publish the updated Risk-o-meter of their schemes every month within 10 days of month-end based on actual holdings."
+            },
+            {
+                id: 61,
+                module: "Scheme Related Documents",
+                question: "In which document can an investor review the total remuneration paid to the AMC's top executives and fund managers?",
+                options: ["The Annual Audited Report / Scheme Financial Accounts", "KIM front page", "Application form tear-off slip", "Daily NAV bulletin"],
+                answer: 0,
+                explanation: "Executive compensation, top 10 employee salaries, and trustee fees are disclosed in the Annual Audited Accounts and website as per SEBI norms."
+            },
+            {
+                id: 62,
+                module: "Scheme Related Documents",
+                question: "How frequently must an AMC disclose the complete portfolio of its debt schemes on its official website?",
+                options: ["Every 6 months", "On a fortnightly and monthly basis as per SEBI regulations", "Every 2 years", "Only upon receiving an investor request"],
+                answer: 1,
+                explanation: "AMCs must disclose complete portfolio holdings on their website within 10 days of month-end, and fortnightly for debt schemes within 5 days."
+            },
+            {
+                id: 63,
+                module: "Scheme Related Documents",
+                question: "Which of the following is considered a 'Fundamental Attribute' of a mutual fund scheme?",
+                options: [
+                    "The phone number of the investor service center in a specific city",
+                    "The type of scheme (e.g. open-ended equity) and investment objective (e.g. capital growth)",
+                    "The printing vendor for physical KIM forms",
+                    "The brand of computers used by AMC dealers"
+                ],
+                answer: 1,
+                explanation: "Fundamental attributes include type of scheme, investment objective, terms of issue (liquidity, redemption), and asset allocation pattern."
+            },
+            {
+                id: 64,
+                module: "Scheme Related Documents",
+                question: "The period during which a new mutual fund scheme is open for initial subscription by public investors is called the:",
+                options: ["Initial Public Offering (IPO) Period", "New Fund Offer (NFO) Period", "Rights Issue Period", "Book Building Window"],
+                answer: 1,
+                explanation: "A new mutual fund scheme is launched via a New Fund Offer (NFO) period during which initial units are offered."
+            },
+            {
+                id: 65,
+                module: "Scheme Related Documents",
+                question: "Under SEBI guidelines, what is the maximum duration an NFO of an open-ended equity scheme can remain open for subscription?",
+                options: ["3 business days", "15 calendar days", "45 calendar days", "90 calendar days"],
+                answer: 1,
+                explanation: "SEBI limits the NFO subscription period for open-ended schemes to a maximum of 15 calendar days (excluding ELSS which can remain open longer)."
+            },
+            {
+                id: 66,
+                module: "Scheme Related Documents",
+                question: "Within how many business days from the closure of an NFO must the AMC allot units and refund excess application money?",
+                options: ["5 business days", "15 business days", "30 business days", "45 business days"],
+                answer: 0,
+                explanation: "Allotment of units and refund of unallotted funds must be completed within 5 business days from NFO closure."
+            },
+            {
+                id: 67,
+                module: "Scheme Related Documents",
+                question: "In the Scheme Information Document (SID), what does the benchmark index represent?",
+                options: [
+                    "A legally guaranteed minimum return standard that the AMC must refund if breached",
+                    "A standard financial index against which the scheme's performance and risk are compared and evaluated",
+                    "The maximum return an investor is permitted to earn in a fiscal year",
+                    "The fixed deposit interest rate of the Sponsor's parent bank"
+                ],
+                answer: 1,
+                explanation: "A benchmark index (such as Nifty 50 TRI) provides a transparent standard against which fund manager performance is measured."
+            },
+            {
+                id: 68,
+                module: "Scheme Related Documents",
+                question: "Where can an investor find historical tracking error data for an Index Mutual Fund scheme?",
+                options: ["Monthly Factsheet and scheme website", "Application receipt slip", "KYC acknowledgment letter", "Bank passbook"],
+                answer: 0,
+                explanation: "Index funds and ETFs disclose tracking error and tracking difference in their monthly factsheets and website disclosures."
+            },
+
+            // =========================================================
+            // MODULE 5: FUND DISTRIBUTION & CHANNEL MANAGEMENT (Q69 - Q85)
+            // =========================================================
+            {
+                id: 69,
+                module: "Fund Distribution & Channel Management",
+                question: "What does 'EUIN' stand for in Indian mutual fund distribution?",
+                options: [
+                    "Employee Unique Identification Number",
+                    "Electronic Unit Issuance Number",
+                    "External Unitholder Index Notation",
+                    "Equity Underwriter Identification Number"
+                ],
+                answer: 0,
+                explanation: "EUIN stands for Employee Unique Identification Number, allotted by AMFI to identify sales personnel and curb mis-selling."
+            },
+            {
+                id: 70,
+                module: "Fund Distribution & Channel Management",
+                question: "According to the AMFI Code of Ethics and SEBI norms, what is 'rebating' and is it permitted?",
+                options: [
+                    "Returning a portion of distributor commission back to the investor in cash or kind; strictly prohibited",
+                    "Reinvesting commissions in corporate equity shares; permitted",
+                    "Charging fees for advisory services; permitted with RIA license",
+                    "Paying marketing incentives to sub-brokers; permitted"
+                ],
+                answer: 0,
+                explanation: "Rebating (giving kickbacks/gifts from commissions to investors) is strictly illegal under AMFI and SEBI regulations."
+            },
+            {
+                id: 71,
+                module: "Fund Distribution & Channel Management",
+                question: "Which commission model has SEBI mandated for mutual fund distributors to eliminate upfront transaction-driven churning?",
+                options: [
+                    "Pure Upfront Commission paid on the day of investment",
+                    "Full Trail Commission model paid continuously on ongoing AUM valuation",
+                    "Lump-sum annual bonus independent of client retention",
+                    "Performance fee calculated on unitholder capital gains"
+                ],
+                answer: 1,
+                explanation: "SEBI mandated an all-trail commission structure so that distributors earn income as long as the investor stays invested."
+            },
+            {
+                id: 72,
+                module: "Fund Distribution & Channel Management",
+                question: "How does the Net Asset Value (NAV) of a 'Direct Plan' compare with the 'Regular Plan' of the exact same mutual fund scheme over time?",
+                options: [
+                    "Direct Plan NAV is lower because of higher administrative expenses.",
+                    "Direct Plan NAV is higher because no distributor trail commission is deducted from scheme expenses.",
+                    "Both plans maintain identical NAVs every day.",
+                    "Regular Plan NAV is higher because distributors invest additional capital."
+                ],
+                answer: 1,
+                explanation: "Direct Plans do not incur distribution/trail commissions, giving them a lower Total Expense Ratio (TER) and higher NAV compounding over time."
+            },
+            {
+                id: 73,
+                module: "Fund Distribution & Channel Management",
+                question: "To become a certified mutual fund distributor in India, an individual must pass the NISM Series V-A exam and obtain an ARN from:",
+                options: ["Reserve Bank of India (RBI)", "Association of Mutual Funds in India (AMFI)", "Securities Appellate Tribunal (SAT)", "Registrar of Companies (RoC)"],
+                answer: 1,
+                explanation: "AMFI registers distributors and issues the AMFI Registration Number (ARN) upon verifying NISM V-A certification."
+            },
+            {
+                id: 74,
+                module: "Fund Distribution & Channel Management",
+                question: "What is the validity period of an individual ARN card issued by AMFI upon clearing the NISM V-A examination?",
+                options: ["1 year", "3 years", "5 years", "Lifetime validity without renewal"],
+                answer: 1,
+                explanation: "ARN cards for individuals are valid for 3 years, after which they must be renewed via CPE (Continuing Professional Education) or re-examination."
+            },
+            {
+                id: 75,
+                module: "Fund Distribution & Channel Management",
+                question: "What is 'churning' in mutual fund distribution?",
+                options: [
+                    "Rebalancing a client portfolio once a year based on goal milestones",
+                    "Systematically moving liquid funds into equity funds via STP",
+                    "Unnecessarily advising an investor to redeem and switch schemes repeatedly solely to trigger fresh distributor transactions",
+                    "Consolidating multiple physical folios into a single demat account"
+                ],
+                answer: 2,
+                explanation: "Churning is an unethical malpractice where distributors frequently rotate client investments to extract transaction fees or contest targets."
+            },
+            {
+                id: 76,
+                module: "Fund Distribution & Channel Management",
+                question: "A distributor advising a client on mutual fund investments checks the client's financial goals, investment horizon, and risk tolerance. This duty is known as:",
+                options: ["Product Arbitrage", "Suitability Assessment", "Churning Protocol", "Underwriting Assessment"],
+                answer: 1,
+                explanation: "Suitability requires distributors to recommend only those schemes that match the investor's financial situation, risk profile, and horizon."
+            },
+            {
+                id: 77,
+                module: "Fund Distribution & Channel Management",
+                question: "Can a registered Mutual Fund Distributor (MFD) charge a separate, direct 'Investment Advisory Fee' to clients for fund selection?",
+                options: [
+                    "Yes, distributors can charge any percentage fee they desire.",
+                    "No, only SEBI-Registered Investment Advisers (RIAs) can charge advisory fees; distributors earn commissions from AMCs and cannot charge advisory fees.",
+                    "Yes, provided the fee is under ₹10,000 per meeting.",
+                    "Yes, for non-resident Indian clients only."
+                ],
+                answer: 1,
+                explanation: "SEBI regulations draw a clear separation: distributors earn distribution commissions from AMCs and cannot charge investment advisory fees."
+            },
+            {
+                id: 78,
+                module: "Fund Distribution & Channel Management",
+                question: "What is the permissible Transaction Charge that an AMC can deduct and pay to an empanelled distributor for a subscription of ₹10,000 or more from a first-time mutual fund investor?",
+                options: ["₹50", "₹100", "₹150", "₹500"],
+                answer: 2,
+                explanation: "For a first-time mutual fund investor investing ₹10,000 or more, an AMC can deduct ₹150 as a transaction charge for the distributor."
+            },
+            {
+                id: 79,
+                module: "Fund Distribution & Channel Management",
+                question: "For an existing mutual fund investor investing ₹10,000 or more, what transaction charge can be deducted for the distributor (if opted-in)?",
+                options: ["₹50", "₹100", "₹200", "₹0"],
+                answer: 1,
+                explanation: "For an existing mutual fund investor, the permissible transaction charge is ₹100 for investments of ₹10,000 and above."
+            },
+            {
+                id: 80,
+                module: "Fund Distribution & Channel Management",
+                question: "No transaction charge can be deducted by an AMC on investments where the application value is:",
+                options: ["Below ₹10,000", "Above ₹50,000", "Above ₹1,00,000", "Paid via NEFT"],
+                answer: 0,
+                explanation: "No transaction charges can be deducted on investment amounts of less than ₹10,000."
+            },
+            {
+                id: 81,
+                module: "Fund Distribution & Channel Management",
+                question: "Can an investor purchase mutual fund units directly through stock exchange order-routing platforms like BSE StAR MF or NSE NMF II?",
+                options: [
+                    "No, stock exchanges only allow direct equity share trading.",
+                    "Yes, registered stock brokers and mutual fund distributors utilize these exchange platforms to process scheme transactions electronically.",
+                    "Yes, but only for sovereign gold bonds.",
+                    "No, exchange trading is reserved exclusively for foreign institutions."
+                ],
+                answer: 1,
+                explanation: "Stock exchange platforms (BSE StAR MF, NSE NMF II) provide digital execution infrastructure for mutual fund transactions."
+            },
+            {
+                id: 82,
+                module: "Fund Distribution & Channel Management",
+                question: "What is the consequence if a distributor does not quote their EUIN on an advisory mutual fund transaction application?",
+                options: [
+                    "The transaction is permanently canceled and money forfeited.",
+                    "The distributor's trail commission may be withheld until EUIN remediation, unless the client signs an explicit 'execution-only' declaration.",
+                    "The client's bank account is frozen.",
+                    "The fund manager must resign."
+                ],
+                answer: 1,
+                explanation: "Without EUIN or a signed client declaration confirming an execution-only transaction, trail commissions are withheld as per AMFI norms."
+            },
+            {
+                id: 83,
+                module: "Fund Distribution & Channel Management",
+                question: "Which of the following channels constitutes an 'Institutional Channel' for mutual fund distribution?",
+                options: [
+                    "Individual independent financial advisers (IFAs)",
+                    "Scheduled Commercial Banks acting as corporate distributors",
+                    "Family relatives of the unitholder",
+                    "College placement cells"
+                ],
+                answer: 1,
+                explanation: "Commercial banks, non-banking financial corporations, and large national distribution houses represent institutional distribution channels."
+            },
+            {
+                id: 84,
+                module: "Fund Distribution & Channel Management",
+                question: "AMFI's code of conduct prohibits distributors from making which of the following statements to prospective clients?",
+                options: [
+                    "Explaining the past 5-year annualized return alongside the benchmark return",
+                    "Promising a guaranteed annual return of 18% in an equity flexi cap scheme",
+                    "Handing over the Key Information Memorandum with the application form",
+                    "Disclosing the trail commission earned on the scheme"
+                ],
+                answer: 1,
+                explanation: "Distributors are strictly barred from promising guaranteed returns or misrepresenting risk in market-linked schemes."
+            },
+            {
+                id: 85,
+                module: "Fund Distribution & Channel Management",
+                question: "If a distributor's ARN is suspended by AMFI due to code of conduct violations, what happens to their trail commissions on existing AUM?",
+                options: [
+                    "Commissions continue uninterrupted.",
+                    "Commissions are paid directly to the distributor in cash.",
+                    "Trail commission payments are suspended during the period of debarment.",
+                    "Commissions are doubled as a penalty to the AMC."
+                ],
+                answer: 2,
+                explanation: "During the period of ARN suspension or cancellation, the AMC stops all commission payments to that distributor."
+            },
+
+            // =========================================================
+            // MODULE 6: NAV, EXPENSE RATIO & CUT-OFF TIMINGS (Q86 - Q102)
+            // =========================================================
+            {
+                id: 86,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "Under SEBI cut-off rules, what is the official application cut-off time for subscription in Liquid and Overnight Funds to receive the previous day's NAV (subject to funds realization)?",
+                options: ["12:00 Noon", "1:30 PM", "3:00 PM", "4:00 PM"],
+                answer: 1,
+                explanation: "For Liquid and Overnight Funds, the official cut-off time for subscription is 1:30 PM (with funds realized in the scheme account before cut-off)."
+            },
+            {
+                id: 87,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "For purchase applications in Equity, Hybrid, and Debt funds (other than Liquid/Overnight), what is the uniform rule for NAV allotment?",
+                options: [
+                    "Same day NAV if physical application is stamped before 3:00 PM, regardless of when money reaches the scheme.",
+                    "Closing NAV of the business day on which funds are credited and available for utilization in the scheme account before 3:00 PM cut-off.",
+                    "The lowest NAV recorded across the preceding 30 business days.",
+                    "Always previous day closing NAV."
+                ],
+                answer: 1,
+                explanation: "SEBI mandates uniform realization of funds: NAV allotment depends on when funds reach the scheme bank account before 3:00 PM cut-off."
+            },
+            {
+                id: 88,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "If an investor submits an application to redeem equity fund units on a Tuesday at 2:15 PM, which NAV will be applied for the redemption?",
+                options: [
+                    "Monday's previous closing NAV",
+                    "Tuesday's same day closing NAV",
+                    "Wednesday's next business day closing NAV",
+                    "Average NAV of Tuesday and Wednesday"
+                ],
+                answer: 1,
+                explanation: "For redemptions received before the 3:00 PM cut-off on a business day, the closing NAV of the same business day is applicable."
+            },
+            {
+                id: 89,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "If an investor submits a redemption application in an Equity Fund on Friday at 4:30 PM, which NAV is allotted?",
+                options: [
+                    "Friday's closing NAV",
+                    "Saturday's indicative NAV",
+                    "Closing NAV of the next business day (Monday)",
+                    "Thursday's closing NAV"
+                ],
+                answer: 2,
+                explanation: "Applications submitted after the 3:00 PM cut-off are treated as received on the next business day and get Monday's closing NAV."
+            },
+            {
+                id: 90,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "Under SEBI Regulation 52, what is the maximum permissible Total Expense Ratio (TER) on the first ₹500 Crores of daily net assets for an open-ended Equity Scheme?",
+                options: ["1.50%", "2.00%", "2.25%", "2.50%"],
+                answer: 2,
+                explanation: "SEBI limits the base TER for open-ended equity schemes to 2.25% on the first ₹500 Crores of daily net assets."
+            },
+            {
+                id: 91,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "As the AUM of a mutual fund scheme grows beyond ₹500 Crores, the permissible TER percentage slab under SEBI rules:",
+                options: ["Increases steadily", "Decreases progressively (economies of scale)", "Remains strictly static forever", "Converts to a flat ₹10 Crore management charge"],
+                answer: 1,
+                explanation: "SEBI's tiered TER structure mandates that as AUM expands, the maximum allowable expense ratio decreases to pass scale benefits to unitholders."
+            },
+            {
+                id: 92,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "For an Index Fund or an Exchange Traded Fund (ETF), SEBI caps the maximum Total Expense Ratio (TER) at:",
+                options: ["0.50% of daily net assets", "1.00% of daily net assets", "1.50% of daily net assets", "2.00% of daily net assets"],
+                answer: 1,
+                explanation: "Under SEBI regulations, the maximum TER permissible for Index Funds and ETFs is 1.00% of daily net assets."
+            },
+            {
+                id: 93,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "Where is the Exit Load penalty collected from an investor who redeems units before the exit load period credited?",
+                options: [
+                    "Retained by the AMC as corporate quarterly net profit",
+                    "Paid to the original distributor as compensation for lost trail income",
+                    "Credited back completely into the scheme's asset pool to benefit remaining unitholders",
+                    "Transferred to the Central Government Consolidated Fund"
+                ],
+                answer: 2,
+                explanation: "SEBI mandates that all exit load proceeds collected must be credited back directly into the scheme pool to compensate persisting unitholders."
+            },
+            {
+                id: 94,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "An investor redeems 1,000 units of a scheme whose prevailing NAV is ₹50. The scheme levies a 1% exit load. What is the net redemption proceeds paid to the investor?",
+                options: ["₹50,000", "₹49,500", "₹45,000", "₹50,500"],
+                answer: 1,
+                explanation: "Exit load = 1% of ₹50 = ₹0.50. Net redemption price per unit = ₹49.50. Total proceeds = 1,000 × ₹49.50 = ₹49,500."
+            },
+            {
+                id: 95,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "How frequently must open-ended mutual fund schemes calculate and declare their Net Asset Value (NAV)?",
+                options: ["Once every week on Friday", "Every business day", "Monthly at fact-sheet release", "Once a quarter"],
+                answer: 1,
+                explanation: "Open-ended schemes must calculate and publish their NAV on every business day on the AMC website and AMFI portal."
+            },
+            {
+                id: 96,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "By what time must AMCs upload daily scheme NAVs on the AMFI portal on every business day (for schemes other than Fund of Funds)?",
+                options: ["7:00 PM", "9:00 PM", "11:00 PM", "6:00 AM next morning"],
+                answer: 2,
+                explanation: "AMCs are required to update and publish NAVs of all schemes by 11:00 PM on every business day (10:00 AM next day for overseas Fund of Funds)."
+            },
+            {
+                id: 97,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "In Net Asset Value (NAV) computation, how are accrued interest on debt securities and accrued scheme expenses treated?",
+                options: [
+                    "Accrued interest is added to assets; accrued expenses are added to liabilities.",
+                    "Accrued interest is deducted from assets; accrued expenses are deducted from liabilities.",
+                    "Both accrued interest and accrued expenses are ignored until cash is deposited in the bank.",
+                    "Accrued interest is recognized only once a year on March 31st."
+                ],
+                answer: 0,
+                explanation: "Daily NAV follows accrual accounting: earned coupon interest is added to assets, while management and administrative expenses are recognized as liabilities."
+            },
+            {
+                id: 98,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "A scheme has total market value of portfolio assets = ₹500 Crores, accrued interest = ₹20 Crores, accrued expenses = ₹10 Crores, and 5 Crore units. The NAV is:",
+                options: ["₹100.00", "₹102.00", "₹104.00", "₹98.00"],
+                answer: 1,
+                explanation: "Net Assets = (500 + 20) - 10 = ₹510 Crores. NAV = 510 / 5 = ₹102.00 per unit."
+            },
+            {
+                id: 99,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "When units are purchased, does the payment of Goods and Services Tax (GST) on AMC investment management fees come from:",
+                options: [
+                    "The investor's personal income tax assessment directly",
+                    "Scheme expenses within the permissible Total Expense Ratio (TER) limits",
+                    "The Reserve Bank of India",
+                    "The personal salary of the fund manager"
+                ],
+                answer: 1,
+                explanation: "GST on investment and advisory management fees is charged to the scheme within the overall regulatory TER limits."
+            },
+            {
+                id: 100,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "What is the primary rationale for the cut-off timing rule in mutual funds?",
+                options: [
+                    "To prevent investors from taking unfair advantage of market movements that occurred after the trading session closed",
+                    "To allow AMC staff to leave office early",
+                    "To restrict retail participation in the capital market",
+                    "To ensure banks do not process electronic payments"
+                ],
+                answer: 0,
+                explanation: "Cut-off timings prevent market timing arbitrage and ensure equal treatment of incoming and existing unitholders."
+            },
+            {
+                id: 101,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "If an investor submits a purchase application along with funds realization on Sunday, which business day's NAV is applicable?",
+                options: ["Friday's preceding NAV", "Saturday's NAV", "Monday's closing NAV (assuming Monday is a business day)", "Tuesday's NAV"],
+                answer: 2,
+                explanation: "Transactions received on non-business days (weekends/holidays) are processed on the next business day at that day's closing NAV."
+            },
+            {
+                id: 102,
+                module: "NAV, Expense Ratio & Cut-Off",
+                question: "An investor switches ₹5,00,000 from an Equity Fund to a Liquid Fund within the same AMC. When is the switch-in to the Liquid Fund processed?",
+                options: [
+                    "Instantly on the same second",
+                    "Only after the redemption proceeds from the source equity scheme are realized in the target liquid scheme account",
+                    "At the NFO issue price of ₹10",
+                    "Without any NAV valuation"
+                ],
+                answer: 1,
+                explanation: "In switch transactions, switch-in units are allotted based on the date and time when funds from the redemption of the source scheme are realized."
+            },
+
+            // =========================================================
+            // MODULE 7: TAXATION & ACCOUNTING (Q103 - Q119)
+            // =========================================================
+            {
+                id: 103,
+                module: "Taxation & Accounting",
+                question: "To qualify as an 'Equity-Oriented Mutual Fund' for taxation under the Indian Income Tax Act, what minimum percentage of total proceeds must be invested in equity shares of domestic companies?",
+                options: ["50%", "65%", "75%", "80%"],
+                answer: 1,
+                explanation: "Under Section 112A / Section 10(23D), an equity-oriented fund must maintain at least 65% of total proceeds in listed domestic company equities."
+            },
+            {
+                id: 104,
+                module: "Taxation & Accounting",
+                question: "What is the minimum holding period required for units of an Equity-Oriented Mutual Fund to qualify as a Long-Term Capital Asset?",
+                options: ["More than 12 months", "More than 24 months", "More than 36 months", "More than 6 months"],
+                answer: 0,
+                explanation: "For equity-oriented funds, holding units for more than 12 months classifies the resulting gain as Long-Term Capital Gain (LTCG)."
+            },
+            {
+                id: 105,
+                module: "Taxation & Accounting",
+                question: "Under current capital gains tax rules, what is the tax rate on Long-Term Capital Gains (LTCG) on equity mutual funds exceeding the statutory threshold (₹1.25 Lakh)?",
+                options: ["10%", "12.5%", "15%", "20% with indexation"],
+                answer: 1,
+                explanation: "LTCG on equity mutual fund units exceeding the statutory threshold (₹1.25 Lakh) is taxed at 12.5% without indexation benefit."
+            },
+            {
+                id: 106,
+                module: "Taxation & Accounting",
+                question: "What is the tax rate applicable on Short-Term Capital Gains (STCG) on redemption of equity-oriented mutual fund units held for 12 months or less?",
+                options: ["10%", "15%", "20%", "At investor's slab rate"],
+                answer: 2,
+                explanation: "Short-Term Capital Gains (STCG) on equity-oriented fund units under Section 111A are taxed at 20% (plus applicable surcharge and cess)."
+            },
+            {
+                id: 107,
+                module: "Taxation & Accounting",
+                question: "How are dividends (IDCW payouts) received from mutual fund schemes taxed in the hands of resident individual investors?",
+                options: [
+                    "Completely tax-free up to ₹10 Lakhs",
+                    "Taxed at a flat 10% rate without any slab calculation",
+                    "Added to the investor's total income and taxed at their applicable personal income tax slab rate",
+                    "Taxed at 30% flat across all investors"
+                ],
+                answer: 2,
+                explanation: "Dividend/IDCW income is treated as normal taxable income and taxed at the investor's marginal income tax slab rate."
+            },
+            {
+                id: 108,
+                module: "Taxation & Accounting",
+                question: "Under Section 194K, what rate of TDS is deducted by mutual funds on dividend (IDCW) distributions to resident unitholders if total dividend in a fiscal year exceeds ₹5,000?",
+                options: ["5%", "10%", "20%", "30%"],
+                answer: 1,
+                explanation: "TDS at 10% is deducted under Section 194K on dividend payouts exceeding ₹5,000 per financial year for resident unitholders with valid PAN."
+            },
+            {
+                id: 109,
+                module: "Taxation & Accounting",
+                question: "What is the rate of uniform Stamp Duty levied on the purchase of mutual fund units (including SIP, STP-in, and lump sum)?",
+                options: ["0.005%", "0.015%", "0.100%", "0.050%"],
+                answer: 0,
+                explanation: "A nationwide uniform stamp duty rate of 0.005% is applicable on the value of mutual fund units purchased/subscribed."
+            },
+            {
+                id: 110,
+                module: "Taxation & Accounting",
+                question: "Securities Transaction Tax (STT) on mutual funds is levied on:",
+                options: [
+                    "Purchase and redemption of Debt Funds",
+                    "Redemption / sale of Equity-Oriented Mutual Fund units",
+                    "Purchase of Government Securities",
+                    "Switch between Liquid Funds"
+                ],
+                answer: 1,
+                explanation: "STT (at 0.001%) is applicable on the redemption/sale of equity-oriented fund units at the time of redemption."
+            },
+            {
+                id: 111,
+                module: "Taxation & Accounting",
+                question: "Under Section 80C of the Income Tax Act, what is the maximum tax deduction available for investment in an Equity Linked Savings Scheme (ELSS)?",
+                options: ["₹50,000", "₹1,00,000", "₹1,50,000", "₹2,50,000"],
+                answer: 2,
+                explanation: "ELSS investments qualify for deduction under Section 80C of the Income Tax Act up to a maximum limit of ₹1,50,000 per financial year."
+            },
+            {
+                id: 112,
+                module: "Taxation & Accounting",
+                question: "What is the statutory lock-in period for investments made in an Equity Linked Savings Scheme (ELSS)?",
+                options: ["1 year", "3 years from the date of unit allotment", "5 years", "Lock-in until the investor turns 60"],
+                answer: 1,
+                explanation: "ELSS has a mandatory lock-in period of 3 years from the date of allotment of units before redemptions or switches are allowed."
+            },
+            {
+                id: 113,
+                module: "Taxation & Accounting",
+                question: "In a Systematic Investment Plan (SIP) in an ELSS fund with monthly installments, when does the 3-year lock-in end for each installment?",
+                options: [
+                    "All installments mature together 3 years after the 1st installment date.",
+                    "Each individual monthly installment completes its own separate 3-year lock-in from its respective allotment date.",
+                    "When the scheme completes 5 years of track record.",
+                    "Whenever the unitholder decides to stop the SIP."
+                ],
+                answer: 1,
+                explanation: "In SIPs, every individual installment represents a distinct unit purchase and must complete its own separate 3-year lock-in."
+            },
+            {
+                id: 114,
+                module: "Taxation & Accounting",
+                question: "Under current tax rules, how are capital gains on Specified Mutual Funds (debt mutual funds with equity exposure not exceeding 35%) taxed?",
+                options: [
+                    "Flat 10% LTCG with indexation",
+                    "As short-term capital gains at the investor's applicable income tax slab rate, regardless of the holding period",
+                    "100% tax-free under Section 10(38)",
+                    "Flat 12.5% without indexation"
+                ],
+                answer: 1,
+                explanation: "Capital gains on specified debt funds (<=35% equity) are treated as short-term capital gains and taxed at the investor's slab rate."
+            },
+            {
+                id: 115,
+                module: "Taxation & Accounting",
+                question: "Which accounting principle prevents an investor from buying units just before an IDCW record date to claim an artificial tax loss upon post-dividend NAV drop?",
+                options: ["Bonus Stripping Rule", "Dividend Stripping Rule (Section 94(7))", "Fair Value Accrual Rule", "Mark-to-Market Convention"],
+                answer: 1,
+                explanation: "Section 94(7) Dividend Stripping provisions disallow capital losses if units bought within 3 months prior to record date are sold within 9 months after."
+            },
+            {
+                id: 116,
+                module: "Taxation & Accounting",
+                question: "Can a Long-Term Capital Loss incurred on mutual fund units be set off against Short-Term Capital Gains?",
+                options: [
+                    "Yes, capital losses can be set off against any capital gain freely.",
+                    "No, Long-Term Capital Loss can be set off ONLY against Long-Term Capital Gains.",
+                    "Yes, if approved by the Assessing Officer.",
+                    "Long-term losses cannot be set off against any gains."
+                ],
+                answer: 1,
+                explanation: "Under the Income Tax Act, LTCL can only be set off against LTCG. It cannot be set off against Short-Term Capital Gains (STCG)."
+            },
+            {
+                id: 117,
+                module: "Taxation & Accounting",
+                question: "For unitholders redeeming mutual fund units, what inventory accounting method is universally used to calculate capital gains on units bought in batches?",
+                options: ["Last In First Out (LIFO)", "First In First Out (FIFO)", "Weighted Average Unit Price", "Highest In First Out (HIFO)"],
+                answer: 1,
+                explanation: "The Income Tax Department mandates the First-In-First-Out (FIFO) method to compute holding periods and capital gains on mutual fund units."
+            },
+            {
+                id: 118,
+                module: "Taxation & Accounting",
+                question: "Is TDS deducted on capital gains realized on redemption of mutual fund units by a Resident Indian individual?",
+                options: [
+                    "Yes, TDS of 20% is deducted on all redemptions.",
+                    "No TDS is deducted on capital gains for resident unitholders.",
+                    "Yes, TDS of 10% is deducted if gain exceeds ₹10,000.",
+                    "Yes, for equity funds only."
+                ],
+                answer: 1,
+                explanation: "No TDS is deducted on capital gains realized on redemptions by Resident Indian investors (TDS applies to NRIs)."
+            },
+            {
+                id: 119,
+                module: "Taxation & Accounting",
+                question: "Under Section 54EC, can an investor invest mutual fund redemption proceeds into specified infrastructure bonds to save LTCG tax?",
+                options: [
+                    "Yes, 54EC applies to all capital gains.",
+                    "No, Section 54EC exemption is restricted solely to capital gains arising from transfer of long-term land or building real estate.",
+                    "Yes, for ELSS redemptions only.",
+                    "Yes, up to ₹1 Crore per year."
+                ],
+                answer: 1,
+                explanation: "Section 54EC capital gains bond exemption is available exclusively on LTCG from the sale of immovable property (land or building)."
+            },
+
+            // =========================================================
+            // MODULE 8: INVESTOR SERVICES (Q120 - Q136)
+            // =========================================================
+            {
+                id: 120,
+                module: "Investor Services",
+                question: "What does 'CKYC' stand for in Indian financial market investor onboarding?",
+                options: [
+                    "Centralized Know Your Customer",
+                    "Central Know Your Customer Registry (managed by CERSAI)",
+                    "Corporate Know Your Client",
+                    "Certified KYC Code"
+                ],
+                answer: 1,
+                explanation: "CKYC stands for Central KYC Records Registry, operated by CERSAI to centralize KYC records across banks, mutual funds, and insurers."
+            },
+            {
+                id: 121,
+                module: "Investor Services",
+                question: "How many maximum nominees can an individual unitholder designate in a single mutual fund folio?",
+                options: ["1 nominee", "2 nominees", "Up to 3 nominees", "Up to 5 nominees"],
+                answer: 2,
+                explanation: "A unitholder can nominate up to 3 nominees in a folio and specify the percentage allocation among them (totaling 100%)."
+            },
+            {
+                id: 122,
+                module: "Investor Services",
+                question: "Under the Micro-SIP facility, an investor is exempt from providing a PAN card if total investments in a rolling 12-month period do not exceed:",
+                options: ["₹10,000", "₹25,000", "₹50,000", "₹1,00,000"],
+                answer: 2,
+                explanation: "Micro-investments/Micro-SIPs up to ₹50,000 per financial year per investor are exempt from PAN requirement (proof of identity/address required)."
+            },
+            {
+                id: 123,
+                module: "Investor Services",
+                question: "In the case of a mutual fund folio opened in the name of a minor child, who can operate the account and sign instructions?",
+                options: [
+                    "The minor child directly after age 10",
+                    "The natural parent (father/mother) or court-appointed legal guardian only",
+                    "The empanelled distributor",
+                    "Any relative of the family"
+                ],
+                answer: 1,
+                explanation: "A minor's folio is represented and operated exclusively by the natural parent or legal guardian until the minor turns 18."
+            },
+            {
+                id: 124,
+                module: "Investor Services",
+                question: "When a minor unitholder attains the age of majority (18 years), what must be done to continue operating the mutual fund folio?",
+                options: [
+                    "The folio is permanently closed and money surrendered to the AMC.",
+                    "The status must be converted to 'Major' by submitting the unitholder's PAN, KYC documents, and signature verified by their bank.",
+                    "The parent continues operating the folio indefinitely.",
+                    "Units are converted into a joint account with the distributor."
+                ],
+                answer: 1,
+                explanation: "Upon turning 18, all debit transactions are frozen until the investor completes the 'Minor Attaining Majority' (MAM) process with KYC and signature verification."
+            },
+            {
+                id: 125,
+                module: "Investor Services",
+                question: "What is the difference between 'Transmission' and 'Transfer' of mutual fund units?",
+                options: [
+                    "Transmission is an operational transfer of units to legal heirs/nominees upon death of unitholder; commercial transfer/sale to third parties is not permitted.",
+                    "Transmission is selling units for cash; Transfer is gifting units to friends.",
+                    "Transmission applies to equity funds; Transfer applies to debt funds.",
+                    "Both terms represent the same stock market trade."
+                ],
+                answer: 0,
+                explanation: "Units cannot be traded or transferred to third parties (except in demat trades); transmission happens by operation of law upon unitholder death."
+            },
+            {
+                id: 126,
+                module: "Investor Services",
+                question: "In a mutual fund folio held jointly with 'Either or Survivor' operation mode, who can sign a redemption request during their lifetime?",
+                options: [
+                    "Both holders must sign jointly every redemption.",
+                    "Either of the joint holders can sign and execute the redemption instruction independently.",
+                    "Only the second holder can sign.",
+                    "Only the registered nominee can sign."
+                ],
+                answer: 1,
+                explanation: "Under 'Either or Survivor' holding, any one of the holders has the legal authority to sign redemption instructions."
+            },
+            {
+                id: 127,
+                module: "Investor Services",
+                question: "What is a Consolidated Account Statement (CAS)?",
+                options: [
+                    "A single consolidated statement sent monthly reflecting all mutual fund transactions and depository demat holdings under a common PAN",
+                    "A tax assessment order issued by the IT department",
+                    "An invoice for distributor commissions",
+                    "A loan recovery statement"
+                ],
+                answer: 0,
+                explanation: "CAS consolidates all transactions across all mutual funds and demat accounts tied to a common PAN into one monthly statement."
+            },
+            {
+                id: 128,
+                module: "Investor Services",
+                question: "Which facility allows an investor to redeem a pre-determined fixed sum of money from a mutual fund scheme on a recurring monthly date?",
+                options: ["Systematic Investment Plan (SIP)", "Systematic Withdrawal Plan (SWP)", "Systematic Transfer Plan (STP)", "Dividend Sweep Option"],
+                answer: 1,
+                explanation: "SWP (Systematic Withdrawal Plan) allows investors to redeem a specified sum regularly, providing cash flow for retirees."
+            },
+            {
+                id: 129,
+                module: "Investor Services",
+                question: "In a Systematic Transfer Plan (STP), an investor transfers funds systematically from a 'Source Scheme' to a 'Target Scheme'. Typically, this involves:",
+                options: [
+                    "Redeeming units from a liquid/debt fund and investing proceeds into an equity fund to manage market entry risk",
+                    "Borrowing money from the AMC to buy gold",
+                    "Transferring money from a bank savings account to a postal RD",
+                    "Withdrawing cash from an ATM"
+                ],
+                answer: 0,
+                explanation: "STP automates periodic redemption from a lower-volatility scheme (e.g. liquid fund) into an equity fund to average purchase costs."
+            },
+            {
+                id: 130,
+                module: "Investor Services",
+                question: "What is the Rupee Cost Averaging benefit of investing through a Systematic Investment Plan (SIP)?",
+                options: [
+                    "More units are purchased automatically when NAV is low, and fewer units when NAV is high, lowering the average cost per unit.",
+                    "The AMC guarantees a 12% return on all installments.",
+                    "All stock market crashes are avoided entirely.",
+                    "The investor pays zero taxes on redemptions."
+                ],
+                answer: 0,
+                explanation: "Rupee cost averaging removes market timing by purchasing more units when prices fall and fewer when prices rise."
+            },
+            {
+                id: 131,
+                module: "Investor Services",
+                question: "Under SEBI guidelines, can an investor make a third-party payment (cheque issued from someone else's bank account) to buy mutual fund units?",
+                options: [
+                    "Yes, third-party cheques are accepted unconditionally.",
+                    "No, third-party payments are generally rejected to prevent money laundering (except specific exceptions like parent for minor, employer for employee).",
+                    "Yes, if the distributor signs as witness.",
+                    "Yes, up to ₹10 Lakhs."
+                ],
+                answer: 1,
+                explanation: "To prevent money laundering, third-party payments are barred except for exceptional cases like parents funding minor accounts or employers paying for employees."
+            },
+            {
+                id: 132,
+                module: "Investor Services",
+                question: "What is an e-NACH mandate in mutual fund SIP registrations?",
+                options: [
+                    "An electronic mandate authenticated via Net Banking or Debit Card authorizing automated debit of SIP installments from the bank account",
+                    "A physical court affidavit",
+                    "An insurance policy on the portfolio",
+                    "A certificate of appreciation from AMFI"
+                ],
+                answer: 0,
+                explanation: "e-NACH allows paperless, instant registration of automated bank account debits for recurring SIP installments."
+            },
+            {
+                id: 133,
+                module: "Investor Services",
+                question: "If a unitholder wishes to pledge their mutual fund units as collateral with a financial institution for a loan, what must they create on the folio?",
+                options: ["A Power of Attorney", "A Lien marked on the specified units in favor of the lender", "A Demat Transmission", "A Nomination claim"],
+                answer: 1,
+                explanation: "A lien is recorded on the folio in favor of the lending bank/NBFC, preventing redemption of those units until the loan is cleared."
+            },
+            {
+                id: 134,
+                module: "Investor Services",
+                question: "What is the maximum turnaround time mandated by SEBI for an AMC to dispatch redemption proceeds to a unitholder?",
+                options: ["3 working days for standard schemes", "10 working days", "30 calendar days", "60 calendar days"],
+                answer: 0,
+                explanation: "SEBI mandates dispatch of redemption proceeds within 3 working days (T+2/T+3 depending on asset class) to prevent liquidity delays."
+            },
+            {
+                id: 135,
+                module: "Investor Services",
+                question: "If an AMC delays dispatching redemption proceeds beyond the regulatory turnaround time, what penalty is it required to pay to the unitholder?",
+                options: [
+                    "Interest at 15% per annum for the period of delay",
+                    "A flat ₹50 gift voucher",
+                    "10 free units of the scheme",
+                    "Zero penalty is applicable"
+                ],
+                answer: 0,
+                explanation: "Under SEBI regulations, the AMC must pay interest at 15% per annum to the unitholder for the delayed period."
+            },
+            {
+                id: 136,
+                module: "Investor Services",
+                question: "What happens if a unitholder opts for the 'IDCW Reinvestment' option instead of 'IDCW Payout'?",
+                options: [
+                    "Dividend cash is transferred to the unitholder's bank account.",
+                    "Dividend amount (net of applicable TDS) is automatically used to purchase additional units of the scheme at the ex-dividend NAV.",
+                    "The dividend is forfeited to the AMC reserves.",
+                    "The units are converted to gold bonds."
+                ],
+                answer: 1,
+                explanation: "In IDCW Reinvestment, the declared dividend (after TDS) is immediately reinvested into the scheme to purchase additional units."
+            },
+
+            // =========================================================
+            // MODULE 9: SCHEME CATEGORIZATION (Q137 - Q153)
+            // =========================================================
+            {
+                id: 137,
+                module: "Scheme Categorization",
+                question: "According to SEBI Scheme Categorization circular, how are 'Large Cap' companies defined in India?",
+                options: [
+                    "Companies with turnover exceeding ₹5,000 Crores",
+                    "1st to 100th companies in terms of full market capitalization on stock exchanges",
+                    "101st to 250th companies in market capitalization",
+                    "Top 50 companies listed on BSE Sensex only"
+                ],
+                answer: 1,
+                explanation: "SEBI defines Large Cap companies as those ranked 1st to 100th in terms of full market capitalization."
+            },
+            {
+                id: 138,
+                module: "Scheme Categorization",
+                question: "How are 'Mid Cap' companies categorized under SEBI guidelines?",
+                options: [
+                    "1st to 100th companies",
+                    "101st to 250th companies in terms of full market capitalization",
+                    "251st company onwards",
+                    "Companies with market cap between ₹500 Crores and ₹1,000 Crores"
+                ],
+                answer: 1,
+                explanation: "Mid Cap companies are those ranked from 101st to 250th in terms of full market capitalization."
+            },
+            {
+                id: 139,
+                module: "Scheme Categorization",
+                question: "Companies ranked 251st onwards in terms of full market capitalization are officially classified as:",
+                options: ["Micro Cap", "Small Cap", "Penny Stocks", "Unlisted Corporates"],
+                answer: 1,
+                explanation: "SEBI defines Small Cap companies as all listed companies ranked 251st and beyond in market capitalization."
+            },
+            {
+                id: 140,
+                module: "Scheme Categorization",
+                question: "In a 'Large Cap Fund', what is the minimum percentage of total assets that must be invested in equity shares of Large Cap companies?",
+                options: ["65%", "75%", "80%", "90%"],
+                answer: 2,
+                explanation: "A Large Cap Fund is mandated to invest at least 80% of its total assets in equity shares of large cap companies."
+            },
+            {
+                id: 141,
+                module: "Scheme Categorization",
+                question: "What is the mandatory minimum allocation across equity tiers in a 'Multi Cap Fund' under SEBI rules?",
+                options: [
+                    "Minimum 65% in equity with no tier restrictions",
+                    "Minimum 75% total equity: with at least 25% each in Large Cap, Mid Cap, and Small Cap stocks",
+                    "Minimum 50% in Large Cap and 50% in Debt",
+                    "Minimum 80% in Mid Cap and Small Cap"
+                ],
+                answer: 1,
+                explanation: "Multi Cap Funds must maintain at least 75% in equity, with a minimum 25% each in Large Cap, Mid Cap, and Small Cap stocks."
+            },
+            {
+                id: 142,
+                module: "Scheme Categorization",
+                question: "How does a 'Flexi Cap Fund' differ from a 'Multi Cap Fund'?",
+                options: [
+                    "Flexi Cap has no fixed 25% minimum tier allocation; it can invest dynamically across Large, Mid, and Small Cap stocks with min 65% total equity.",
+                    "Flexi Cap must invest 100% in international companies.",
+                    "Flexi Cap is a pure debt scheme.",
+                    "Flexi Cap funds cannot invest in Large Cap stocks."
+                ],
+                answer: 0,
+                explanation: "Flexi Cap schemes must maintain at least 65% in equity, but the fund manager has full flexibility to allocate across large, mid, and small caps without sub-caps."
+            },
+            {
+                id: 143,
+                module: "Scheme Categorization",
+                question: "What is the maximum number of stocks a 'Focused Fund' is permitted to hold in its portfolio under SEBI rules?",
+                options: ["10 stocks", "20 stocks", "30 stocks", "50 stocks"],
+                answer: 2,
+                explanation: "A Focused Fund focuses on a high-conviction portfolio and can hold a maximum of 30 stocks (with at least 65% in equity)."
+            },
+            {
+                id: 144,
+                module: "Scheme Categorization",
+                question: "What is the portfolio maturity restriction for an 'Overnight Debt Fund'?",
+                options: [
+                    "Maturity of 1 business day",
+                    "Maturity up to 7 calendar days",
+                    "Maturity up to 91 days",
+                    "Maturity up to 1 year"
+                ],
+                answer: 0,
+                explanation: "Overnight Funds invest in debt and money market securities having a residual maturity of 1 business day (such as TREPS/Repo)."
+            },
+            {
+                id: 145,
+                module: "Scheme Categorization",
+                question: "Under SEBI categorization, a 'Liquid Fund' can invest in debt and money market instruments with residual maturity up to:",
+                options: ["1 day", "30 days", "91 days", "180 days"],
+                answer: 2,
+                explanation: "Liquid schemes can invest in securities with a maximum residual maturity of up to 91 days only."
+            },
+            {
+                id: 146,
+                module: "Scheme Categorization",
+                question: "A 'Money Market Fund' invests in money market instruments having maturity up to:",
+                options: ["91 days", "180 days", "1 year (365 days)", "3 years"],
+                answer: 2,
+                explanation: "Money Market funds invest in money market instruments (CPs, CDs, T-Bills) having maturity of up to 1 year."
+            },
+            {
+                id: 147,
+                module: "Scheme Categorization",
+                question: "A 'Corporate Bond Fund' is mandated by SEBI to invest at least what percentage of its total assets in highest-rated (AA+ and above) corporate bonds?",
+                options: ["65%", "75%", "80%", "90%"],
+                answer: 2,
+                explanation: "Corporate Bond Funds must invest a minimum of 80% of total assets in corporate bonds rated AA+ and above."
+            },
+            {
+                id: 148,
+                module: "Scheme Categorization",
+                question: "In a 'Credit Risk Fund', what minimum percentage of total assets must be invested in corporate bonds rated below AA+?",
+                options: ["50%", "65%", "80%", "35%"],
+                answer: 1,
+                explanation: "Credit Risk Funds must invest at least 65% of total assets in corporate debt securities rated below AA+ to generate higher yields."
+            },
+            {
+                id: 149,
+                module: "Scheme Categorization",
+                question: "A 'Gilt Fund' is required to invest at least what percentage of its total assets in Government Securities across maturities?",
+                options: ["65%", "75%", "80%", "90%"],
+                answer: 2,
+                explanation: "Gilt Funds must invest at least 80% of total assets in Central and State Government Securities (G-Secs and SDLs)."
+            },
+            {
+                id: 150,
+                module: "Scheme Categorization",
+                question: "In an 'Aggressive Hybrid Fund', what is the statutory asset allocation range mandated for equity and equity-related instruments?",
+                options: [
+                    "10% to 25% equity",
+                    "40% to 60% equity",
+                    "65% to 80% equity (and 20% to 35% debt)",
+                    "80% to 100% equity"
+                ],
+                answer: 2,
+                explanation: "Aggressive Hybrid Funds must invest 65% to 80% of total assets in equity instruments and 20% to 35% in debt instruments."
+            },
+            {
+                id: 151,
+                module: "Scheme Categorization",
+                question: "A 'Conservative Hybrid Fund' allocates what proportion of its total assets to equity instruments?",
+                options: [
+                    "10% to 25% in equity (and 75% to 90% in debt)",
+                    "50% to 50% in equity and debt",
+                    "65% to 80% in equity",
+                    "Zero equity exposure"
+                ],
+                answer: 0,
+                explanation: "Conservative Hybrid Funds invest 10% to 25% in equity and 75% to 90% in debt securities to generate steady income with modest growth."
+            },
+            {
+                id: 152,
+                module: "Scheme Categorization",
+                question: "In an 'Arbitrage Fund', how is the equity exposure predominantly managed to generate risk-free returns?",
+                options: [
+                    "By investing in speculative penny stocks",
+                    "By holding cash and waiting for market corrections",
+                    "By simultaneous buying of equity shares in cash market and selling in futures derivative market to exploit price differences",
+                    "By lending funds to real estate developers"
+                ],
+                answer: 2,
+                explanation: "Arbitrage funds exploit price differentials between cash and derivative markets (cash-futures arbitrage) to generate low-risk debt-like returns."
+            },
+            {
+                id: 153,
+                module: "Scheme Categorization",
+                question: "A 'Solution-Oriented' Retirement Fund or Children's Fund carries a mandatory minimum lock-in period of:",
+                options: [
+                    "1 year",
+                    "3 years",
+                    "5 years or till the age of retirement/majority (whichever is earlier)",
+                    "10 years unconditionally"
+                ],
+                answer: 2,
+                explanation: "Solution-oriented schemes (Retirement/Children's funds) carry a mandatory lock-in of 5 years or until retirement/majority, whichever is earlier."
+            },
+
+            // =========================================================
+            // MODULE 10: RISK, RETURN & PERFORMANCE (Q154 - Q170)
+            // =========================================================
+            {
+                id: 154,
+                module: "Risk, Return & Performance",
+                question: "Which statistical risk metric measures the dispersion of a mutual fund's periodic returns around its historical average mean return (Total Risk)?",
+                options: ["Beta", "Standard Deviation", "R-Squared", "Expense Ratio"],
+                answer: 1,
+                explanation: "Standard Deviation measures total risk (both systematic and unsystematic volatility) of a scheme's historical returns."
+            },
+            {
+                id: 155,
+                module: "Risk, Return & Performance",
+                question: "What does a Beta of 1.35 indicate for an equity mutual fund scheme?",
+                options: [
+                    "The scheme is 35% less volatile than the benchmark index.",
+                    "The scheme is expected to be 35% more volatile than the benchmark index in response to market shifts.",
+                    "The scheme guarantees a 35% annual return.",
+                    "The scheme carries zero market risk."
+                ],
+                answer: 1,
+                explanation: "Beta measures systematic sensitivity to benchmark movements. Beta > 1 means the scheme is more volatile than the market."
+            },
+            {
+                id: 156,
+                module: "Risk, Return & Performance",
+                question: "What is the formula used to calculate the Sharpe Ratio of a mutual fund portfolio?",
+                options: [
+                    "(Fund Return - Risk Free Rate) / Beta",
+                    "(Fund Return - Risk Free Rate) / Standard Deviation",
+                    "(Fund Return - Benchmark Return) / Tracking Error",
+                    "(Fund Return - Inflation Rate) / NAV"
+                ],
+                answer: 1,
+                explanation: "Sharpe Ratio = (Portfolio Return - Risk Free Rate) / Standard Deviation. It evaluates excess return per unit of total risk."
+            },
+            {
+                id: 157,
+                module: "Risk, Return & Performance",
+                question: "How does the Treynor Ratio differ from the Sharpe Ratio?",
+                options: [
+                    "Treynor Ratio uses Beta (Systematic Risk) in the denominator, whereas Sharpe Ratio uses Standard Deviation (Total Risk).",
+                    "Treynor Ratio ignores the risk-free rate.",
+                    "Treynor Ratio is used only for debt funds.",
+                    "Sharpe Ratio can never be negative."
+                ],
+                answer: 0,
+                explanation: "Treynor Ratio = (Portfolio Return - Rf) / Beta, evaluating risk-adjusted return relative to systematic market risk."
+            },
+            {
+                id: 158,
+                module: "Risk, Return & Performance",
+                question: "What does a positive Jensen's Alpha (+2.5%) generated by an active fund manager signify?",
+                options: [
+                    "The fund underperformed fixed deposits by 2.5%.",
+                    "The fund manager generated 2.5% excess return over and above what was expected given the scheme's market risk (Beta).",
+                    "The scheme charged 2.5% extra management fees.",
+                    "The scheme suffered a 2.5% drawdown."
+                ],
+                answer: 1,
+                explanation: "Alpha measures the value added by active portfolio management over the CAPM-predicted risk-adjusted benchmark return."
+            },
+            {
+                id: 159,
+                module: "Risk, Return & Performance",
+                question: "Why did SEBI mandate that mutual funds must benchmark their equity scheme performance against the Total Return Index (TRI) instead of the Price Return Index (PRI)?",
+                options: [
+                    "Because PRI is calculated only once a year.",
+                    "Because TRI accounts for both capital price appreciation and cash dividend distributions from underlying stocks, reflecting true comparative performance.",
+                    "Because TRI guarantees higher returns for unitholders.",
+                    "Because PRI does not include government tax deductions."
+                ],
+                answer: 1,
+                explanation: "TRI reflects total return including reinvested cash dividends, preventing active funds from claiming artificial outperformance over PRI."
+            },
+            {
+                id: 160,
+                module: "Risk, Return & Performance",
+                question: "Which return calculation methodology is used to compute the annualized compounded growth rate of an investment held for more than 1 year?",
+                options: ["Simple Annual Interest", "Compounded Annual Growth Rate (CAGR)", "Arithmetic Average Return", "Current Yield"],
+                answer: 1,
+                explanation: "CAGR represents the smoothed annual rate at which an investment would have grown if compounded over a multi-year horizon."
+            },
+            {
+                id: 161,
+                module: "Risk, Return & Performance",
+                question: "An investor invests ₹1,00,000 in a mutual fund scheme. After 3 years, the investment value grows to ₹1,72,800. What is the approximate CAGR?",
+                options: ["10% per annum", "20% per annum", "24.2% per annum", "72.8% per annum"],
+                answer: 1,
+                explanation: "CAGR = (End Value / Start Value)^(1/3) - 1 = (1.728)^(1/3) - 1 = 1.20 - 1 = 20% per annum."
+            },
+            {
+                id: 162,
+                module: "Risk, Return & Performance",
+                question: "When evaluating performance across multiple irregular cash inflows and outflows in a portfolio (such as ongoing SIP installments), which return metric is appropriate?",
+                options: ["Point-to-Point CAGR", "Extended Internal Rate of Return (XIRR)", "Simple Absolute Return", "Dividend Yield"],
+                answer: 1,
+                explanation: "XIRR calculates the annualized internal rate of return for multiple irregular or recurring cash transactions at different dates."
+            },
+            {
+                id: 163,
+                module: "Risk, Return & Performance",
+                question: "For an Index Fund or ETF tracking the Nifty 50, what does 'Tracking Error' measure?",
+                options: [
+                    "The annual standard deviation of the difference in daily returns between the index fund and its target benchmark index",
+                    "The total commission paid to stockbrokers",
+                    "The number of times the fund manager bought wrong shares",
+                    "The percentage of cash held in current accounts"
+                ],
+                answer: 0,
+                explanation: "Tracking Error measures the annualized standard deviation of excess returns (fund return - index return), reflecting replication precision."
+            },
+            {
+                id: 164,
+                module: "Risk, Return & Performance",
+                question: "A lower Tracking Error in an Index Mutual Fund signifies:",
+                options: [
+                    "Poor scheme management",
+                    "Closer and more accurate replication of the underlying benchmark index returns",
+                    "Higher management expense ratios",
+                    "Excessive active risk taking"
+                ],
+                answer: 1,
+                explanation: "A low tracking error means the fund is closely mirroring the benchmark's returns with minimal divergence."
+            },
+            {
+                id: 165,
+                module: "Risk, Return & Performance",
+                question: "The Sortino Ratio improves upon the Sharpe Ratio by penalizing only:",
+                options: [
+                    "Total volatility in both upward and downward directions",
+                    "Downside volatility (returns falling below the minimum acceptable return threshold)",
+                    "Beta volatility",
+                    "Tracking difference"
+                ],
+                answer: 1,
+                explanation: "Sortino Ratio isolates harmful downside risk by using Downside Deviation in the denominator instead of total standard deviation."
+            },
+            {
+                id: 166,
+                module: "Risk, Return & Performance",
+                question: "What does R-Squared (R²) indicate in mutual fund performance analysis?",
+                options: [
+                    "The percentage of a fund's movements that can be explained by movements in its benchmark index",
+                    "The total dividend paid over 10 years",
+                    "The exact future return of the scheme",
+                    "The credit default rate of underlying bonds"
+                ],
+                answer: 0,
+                explanation: "R-squared measures the proportion of a fund's performance explained by the benchmark (a high R² validates the fund's Beta metric)."
+            },
+            {
+                id: 167,
+                module: "Risk, Return & Performance",
+                question: "Which ratio evaluates the excess return of a fund relative to its benchmark divided by the fund's Tracking Error?",
+                options: ["Information Ratio", "Treynor Ratio", "Price to Earnings Ratio", "Expense Ratio"],
+                answer: 0,
+                explanation: "Information Ratio = (Fund Return - Benchmark Return) / Tracking Error. It evaluates consistency of active alpha generation."
+            },
+            {
+                id: 168,
+                module: "Risk, Return & Performance",
+                question: "In a debt mutual fund, Yield to Maturity (YTM) represents:",
+                options: [
+                    "A legally guaranteed return paid to unitholders next week",
+                    "The weighted average anticipated rate of return of all bonds in the portfolio if held until maturity (assuming no default and reinvestment at same yield)",
+                    "The coupon rate of the shortest maturing bond",
+                    "The trailing 1-year capital gain"
+                ],
+                answer: 1,
+                explanation: "YTM is the annualized rate of return expected on the portfolio if all underlying debt instruments are held to maturity without default."
+            },
+            {
+                id: 169,
+                module: "Risk, Return & Performance",
+                question: "What is 'Macaulay Duration' in debt portfolio management?",
+                options: [
+                    "The calendar age of the fund manager",
+                    "The weighted average time required for an investor to recover the cash flows (interest and principal) of a bond",
+                    "The maturity date of the longest G-Sec",
+                    "The credit spread margin"
+                ],
+                answer: 1,
+                explanation: "Macaulay duration measures the weighted average time until an investor receives the cash flows of a bond."
+            },
+            {
+                id: 170,
+                module: "Risk, Return & Performance",
+                question: "If interest rates in the economy are expected to fall sharply over the next 18 months, which type of debt fund will benefit the most in capital gains?",
+                options: [
+                    "Overnight Fund (duration 1 day)",
+                    "Liquid Fund (duration up to 91 days)",
+                    "Long-term Gilt Fund with high duration (e.g. 8-10 years)",
+                    "Ultra Short Duration Fund (duration 3-6 months)"
+                ],
+                answer: 2,
+                explanation: "Longer duration bonds experience the highest price appreciation when interest rates decline due to higher interest rate sensitivity."
+            },
+
+            // =========================================================
+            // MODULE 11: FINANCIAL PLANNING & ASSET ALLOCATION (Q171 - Q186)
+            // =========================================================
+            {
+                id: 171,
+                module: "Financial Planning & Asset Allocation",
+                question: "In comprehensive financial planning, what is the very first recommended step before committing long-term funds to volatile equity markets?",
+                options: [
+                    "Borrowing a margin trading loan to buy small cap stocks",
+                    "Building an emergency contingency reserve (3 to 6 months of living expenses) and securing adequate life/health insurance",
+                    "Purchasing commercial real estate on credit",
+                    "Investing all wealth in sectoral thematic funds"
+                ],
+                answer: 1,
+                explanation: "Sound financial planning starts with emergency liquidity and risk protection (insurance) before wealth accumulation."
+            },
+            {
+                id: 172,
+                module: "Financial Planning & Asset Allocation",
+                question: "Using the Rule of 72, approximately how many years will it take for an investment to double in value at a compounded annual return of 9%?",
+                options: ["6 years", "8 years", "12 years", "18 years"],
+                answer: 1,
+                explanation: "Years to double ≈ 72 / Interest Rate = 72 / 9 = 8 years."
+            },
+            {
+                id: 173,
+                module: "Financial Planning & Asset Allocation",
+                question: "What is 'Strategic Asset Allocation' (SAA)?",
+                options: [
+                    "Trading daily based on technical chart patterns",
+                    "Establishing an optimal long-term target asset mix (e.g. 60% Equity / 40% Debt) aligned with the investor's risk tolerance and goal horizon, and rebalancing periodically",
+                    "Moving 100% into cash whenever headlines are negative",
+                    "Investing only in the highest performing fund of the past quarter"
+                ],
+                answer: 1,
+                explanation: "Strategic Asset Allocation sets fixed target weightages across asset classes matching long-term goals and rebalances periodically."
+            },
+            {
+                id: 174,
+                module: "Financial Planning & Asset Allocation",
+                question: "What is 'Tactical Asset Allocation' (TAA)?",
+                options: [
+                    "Holding target allocations permanently without any change",
+                    "Making short to medium-term adjustments to asset weights to capitalize on prevailing market mispricings or macroeconomic shifts",
+                    "Investing exclusively in foreign tech stocks",
+                    "Buying lottery bonds"
+                ],
+                answer: 1,
+                explanation: "Tactical Asset Allocation involves active short-term deviations from the strategic mix to exploit market opportunities."
+            },
+            {
+                id: 175,
+                module: "Financial Planning & Asset Allocation",
+                question: "What formula determines the Future Value (FV) of a current lump sum investment (PV) at an annual compounding rate 'r' over 'n' years?",
+                options: [
+                    "FV = PV × (1 + r)^n",
+                    "FV = PV × (1 + r × n)",
+                    "FV = PV / (1 + r)^n",
+                    "FV = PV + (r × n)"
+                ],
+                answer: 0,
+                explanation: "Future Value formula under compound interest is FV = PV × (1 + r)^n."
+            },
+            {
+                id: 176,
+                module: "Financial Planning & Asset Allocation",
+                question: "An investor has a specific financial goal due in 18 months (funding a child's college admission fee). Which asset class is most suitable?",
+                options: [
+                    "Small Cap Equity Scheme",
+                    "Short Duration Debt Fund / Banking & PSU Debt Fund",
+                    "Sectoral Infrastructure Fund",
+                    "International Biotech Fund"
+                ],
+                answer: 1,
+                explanation: "For short-term goals (< 2-3 years), capital preservation and liquidity in low-duration debt funds are critical; equities carry short-term capital loss risk."
+            },
+            {
+                id: 177,
+                module: "Financial Planning & Asset Allocation",
+                question: "An investor's risk profile consists of two distinct components: Risk Capacity and Risk Tolerance. Risk Capacity is determined by:",
+                options: [
+                    "The investor's emotional stomach for watching portfolio values drop",
+                    "Objective financial realities such as net worth, stable income, time horizon, and family dependencies",
+                    "Horoscope predictions",
+                    "Market sentiment indices"
+                ],
+                answer: 1,
+                explanation: "Risk capacity is the objective ability to absorb financial loss based on wealth, age, income stability, and horizon."
+            },
+            {
+                id: 178,
+                module: "Financial Planning & Asset Allocation",
+                question: "What is the primary psychological trap known as 'Loss Aversion' in behavioral finance?",
+                options: [
+                    "Investors feel the mental pain of a financial loss much more intensely than the pleasure of an equivalent financial gain",
+                    "Investors prefer paying higher taxes",
+                    "Investors love taking unnecessary penny stock risks",
+                    "Investors avoid checking bank balances"
+                ],
+                answer: 0,
+                explanation: "Loss aversion shows that psychological pain from losses is roughly twice as intense as pleasure from equivalent gains, leading to irrational panic selling."
+            },
+            {
+                id: 179,
+                module: "Financial Planning & Asset Allocation",
+                question: "Portfolio Rebalancing involves:",
+                options: [
+                    "Selling winners and buying losers to restore portfolio weights back to the predetermined target strategic asset allocation",
+                    "Liquidating everything to hold paper currency in times of inflation",
+                    "Changing the bank account registered on the folio",
+                    "Converting regular plans into closed-ended funds"
+                ],
+                answer: 0,
+                explanation: "Rebalancing realigns asset weights when market movements cause drift, enforcing a disciplined buy-low-sell-high strategy."
+            },
+            {
+                id: 180,
+                module: "Financial Planning & Asset Allocation",
+                question: "A young investor aged 26 with a secure salary and a 30-year retirement horizon typically possesses:",
+                options: [
+                    "Very low risk capacity and very short time horizon",
+                    "High risk capacity and long investment time horizon",
+                    "Zero ability to bear equity market volatility",
+                    "Immediate requirement for annuity income"
+                ],
+                answer: 1,
+                explanation: "Youth, earning longevity, and a long horizon give young professionals high risk capacity to absorb short-term equity volatility."
+            },
+            {
+                id: 181,
+                module: "Financial Planning & Asset Allocation",
+                question: "An investor near retirement (age 58) with goal horizon of 2 years should structure their portfolio to emphasize:",
+                options: [
+                    "Aggressive small-cap and micro-cap speculative growth",
+                    "Capital preservation, regular income generation, and liquidity via high-quality debt and hybrid conservative funds",
+                    "Leveraged commodity derivatives",
+                    "Cryptocurrency tokens"
+                ],
+                answer: 1,
+                explanation: "As retirement approaches, capital preservation and stability take precedence over aggressive capital appreciation."
+            },
+            {
+                id: 182,
+                module: "Financial Planning & Asset Allocation",
+                question: "What is the primary benefit of diversification across asset classes that exhibit low or negative correlation?",
+                options: [
+                    "Elimination of all systematic economic risks",
+                    "Reduction in overall portfolio volatility without necessarily sacrificing long-term expected returns",
+                    "100% tax exemption",
+                    "Guaranteed positive returns every single day"
+                ],
+                answer: 1,
+                explanation: "Combining non-correlated assets (e.g. equities, debt, gold) cushions portfolio downturns, optimizing risk-adjusted returns."
+            },
+            {
+                id: 183,
+                module: "Financial Planning & Asset Allocation",
+                question: "What is an 'Annuity' in post-retirement financial planning?",
+                options: [
+                    "A lump-sum lottery prize",
+                    "A financial contract providing guaranteed periodic income cash flows over the retiree's remaining lifetime",
+                    "A mutual fund exit load penalty",
+                    "A short-term treasury bill"
+                ],
+                answer: 1,
+                explanation: "An annuity provides guaranteed regular income payouts in retirement in exchange for an initial lump-sum capital investment."
+            },
+            {
+                id: 184,
+                module: "Financial Planning & Asset Allocation",
+                question: "If an investor requires ₹10 Lakhs in today's money for a child's schooling, how much will be needed in 10 years at 6% annual inflation?",
+                options: ["₹10.0 Lakhs", "₹13.5 Lakhs", "₹17.9 Lakhs", "₹25.0 Lakhs"],
+                answer: 2,
+                explanation: "FV = PV × (1 + inflation)^10 = 10,00,000 × (1.06)^10 = 10,00,000 × 1.7908 = ₹17.91 Lakhs."
+            },
+            {
+                id: 185,
+                module: "Financial Planning & Asset Allocation",
+                question: "What is 'Herd Mentality' in investor behavior?",
+                options: [
+                    "Making independent calculations using discounted cash flow models",
+                    "Rushing to buy equities during market bubbles because everyone else is buying, and panic-selling during market crashes",
+                    "Automating monthly SIP debits",
+                    "Diversifying across multiple mutual fund categories"
+                ],
+                answer: 1,
+                explanation: "Herd mentality causes investors to follow crowd euphoria or panic rather than their own financial plan and analysis."
+            },
+            {
+                id: 186,
+                module: "Financial Planning & Asset Allocation",
+                question: "Why should an emergency reserve fund not be invested in closed-ended equity mutual funds or ELSS?",
+                options: [
+                    "Because emergency funds must be accessible within 24-48 hours with minimal capital loss risk, while ELSS has a 3-year lock-in and high market volatility",
+                    "Because emergency funds earn higher tax rebates in gold",
+                    "Because banks do not allow online transfers for ELSS",
+                    "Because mutual funds do not accept emergency declarations"
+                ],
+                answer: 0,
+                explanation: "Emergency funds demand absolute capital safety and instant liquidity; lock-in schemes like ELSS defeat this purpose."
+            },
+
+            // =========================================================
+            // MODULE 12: ETHICS & CODE OF CONDUCT (Q187 - Q200)
+            // =========================================================
+            {
+                id: 187,
+                module: "Ethics & Code of Conduct",
+                question: "Under the AMFI Code of Conduct, what is an intermediary's primary responsibility regarding product recommendations?",
+                options: [
+                    "Recommending schemes that offer foreign incentive trips and high upfront incentives",
+                    "Ensuring that the scheme recommended matches the client's financial needs, risk capacity, and investment horizon (Suitability)",
+                    "Distributing exclusively the schemes of the sponsor's group company",
+                    "Promoting only closed-ended NFO launches"
+                ],
+                answer: 1,
+                explanation: "The principle of suitability requires distributors to ensure that recommendations align with the client's risk profile and goals."
+            },
+            {
+                id: 188,
+                module: "Ethics & Code of Conduct",
+                question: "What is an intermediary's statutory duty regarding the disclosure of commissions to prospective investors?",
+                options: [
+                    "Commissions must be kept confidential and never disclosed to clients.",
+                    "The distributor must disclose all commissions (trail and any other incentives) received for various competing schemes to the prospective investor.",
+                    "Commission disclosure is required only if the investor files a police complaint.",
+                    "Only foreign bank distributors must disclose commissions."
+                ],
+                answer: 1,
+                explanation: "SEBI and AMFI mandate full disclosure of commissions earned across competing schemes to eliminate hidden conflicts of interest."
+            },
+            {
+                id: 189,
+                module: "Ethics & Code of Conduct",
+                question: "If a distributor assists a client with physical or online application forms, what is strictly prohibited regarding client signatures?",
+                options: [
+                    "Verifying the signature against government ID proofs",
+                    "Obtaining blank signed application forms or redemption slips from the client in advance",
+                    "Witnessing the signature",
+                    "Assisting the client with filling in their address"
+                ],
+                answer: 1,
+                explanation: "Taking pre-signed blank application or redemption forms from investors is an illegal malpractice that can lead to ARN cancellation."
+            },
+            {
+                id: 190,
+                module: "Ethics & Code of Conduct",
+                question: "Under SEBI Advertising Guidelines, which mandatory warning disclaimer must be displayed legibly in all mutual fund promotional advertisements?",
+                options: [
+                    "'Mutual funds guarantee double money in five years.'",
+                    "'Mutual Fund investments are subject to market risks, read all scheme related documents carefully.'",
+                    "'Mutual funds are fully protected by Reserve Bank of India.'",
+                    "'Mutual funds carry zero risk of capital erosion.'"
+                ],
+                answer: 1,
+                explanation: "All mutual fund advertisements must clearly display the standard statutory risk disclaimer warning investors of market risks."
+            },
+            {
+                id: 191,
+                module: "Ethics & Code of Conduct",
+                question: "Can an empanelled mutual fund distributor accept cash payments exceeding ₹50,000 from an investor for mutual fund purchases?",
+                options: [
+                    "Yes, cash up to ₹5 Lakhs is accepted without receipt.",
+                    "No, cash transactions in mutual funds are capped at ₹50,000 per investor per financial year across all schemes and require proper documentation.",
+                    "Yes, for equity funds only.",
+                    "Cash is accepted in unlimited amounts if paid before 3:00 PM."
+                ],
+                answer: 1,
+                explanation: "SEBI caps cash investments in mutual funds at ₹50,000 per financial year per investor to curb black money and comply with PMLA rules."
+            },
+            {
+                id: 192,
+                module: "Ethics & Code of Conduct",
+                question: "A distributor induces an investor to redeem units from Scheme A and immediately reinvest the same amount into Scheme B of another AMC solely to meet a monthly sales target. This is an example of:",
+                options: ["Fiduciary Duty", "Portfolio Diversification", "Churning and Mis-selling", "Tax Loss Harvesting"],
+                answer: 2,
+                explanation: "Unjustified rotation of investments that incurs exit loads and tax costs solely to generate distributor commissions is unethical churning."
+            },
+            {
+                id: 193,
+                module: "Ethics & Code of Conduct",
+                question: "Under the Prevention of Money Laundering Act (PMLA), financial intermediaries must maintain records of client transactions for at least:",
+                options: ["1 year", "3 years", "5 years from date of transaction", "100 years"],
+                answer: 2,
+                explanation: "PMLA provisions require financial intermediaries to preserve records of transactions and client identity for at least 5 years."
+            },
+            {
+                id: 194,
+                module: "Ethics & Code of Conduct",
+                question: "If an investor is dissatisfied with the resolution provided by an AMC or distributor, which SEBI web-based centralized grievance redressal platform can they escalate the complaint to?",
+                options: ["SCORES (SEBI Complaints Redress System)", "AMFI Portal", "CAMS Online", "RBI Ombudsman"],
+                answer: 0,
+                explanation: "SCORES (SEBI Complaints Redress System) is SEBI's centralized online grievance redressal platform for securities market investors."
+            },
+            {
+                id: 195,
+                module: "Ethics & Code of Conduct",
+                question: "When presenting past performance of a mutual fund scheme in marketing materials, what rule must be strictly followed?",
+                options: [
+                    "Show only the best single week of returns.",
+                    "Disclose performance for standard trailing periods (1, 3, 5 years and since inception) alongside the appropriate benchmark index performance.",
+                    "Omit benchmark returns if the scheme underperformed.",
+                    "Promise identical future returns in writing."
+                ],
+                answer: 1,
+                explanation: "SEBI advertising code requires disclosing standard trailing period returns alongside benchmark returns to avoid misleading representations."
+            },
+            {
+                id: 196,
+                module: "Ethics & Code of Conduct",
+                question: "Can an Asset Management Company offer expensive foreign luxury travel junkets or high-value physical gifts to distributors for meeting sales quotas?",
+                options: [
+                    "Yes, if targets exceed ₹50 Crores.",
+                    "No, SEBI regulations strictly prohibit AMCs from providing gifts, foreign holidays, or non-commission incentives to distributors.",
+                    "Yes, for top 10 national distributors.",
+                    "Yes, with trustee concurrence."
+                ],
+                answer: 1,
+                explanation: "SEBI bans non-cash incentives, foreign holidays, and contest gifts to eliminate commercial bias in product recommendations."
+            },
+            {
+                id: 197,
+                module: "Ethics & Code of Conduct",
+                question: "What is an intermediary's obligation regarding the confidentiality of client financial and personal information?",
+                options: [
+                    "Client data can be sold to insurance telemarketers for additional income.",
+                    "Distributors must maintain strict confidentiality of client data and cannot disclose it to any third party except as required by statutory legal authorities.",
+                    "Confidentiality applies only to high-net-worth clients.",
+                    "Client data must be shared on social media for marketing."
+                ],
+                answer: 1,
+                explanation: "Intermediaries have a fiduciary duty to preserve complete confidentiality of client records, investments, and personal information."
+            },
+            {
+                id: 198,
+                module: "Ethics & Code of Conduct",
+                question: "What is 'Front Running' in capital markets and mutual fund operations?",
+                options: [
+                    "Running an advertisement campaign before launching an NFO",
+                    "An unethical and illegal practice where an insider or dealer trades in a stock on their personal account before executing a large scheme order to profit from the price movement",
+                    "Processing redemption cheques ahead of schedule",
+                    "Walking in front of clients during a seminar"
+                ],
+                answer: 1,
+                explanation: "Front-running is an illegal practice where personal orders are placed before executing large institutional trades to profit from subsequent price impact."
+            },
+            {
+                id: 199,
+                module: "Ethics & Conduct",
+                question: "If a distributor discovers an inadvertent error in a client's application details after submission, what is the proper ethical course of action?",
+                options: [
+                    "Forge the client's signature on a correction slip",
+                    "Inform the client immediately and obtain formal written authorization/remediation to rectify the error with the RTA",
+                    "Ignore the error and hope nobody notices",
+                    "Delete the folio permanently"
+                ],
+                answer: 1,
+                explanation: "The distributor must promptly communicate the issue to the client and obtain proper authorized documentation to correct records."
+            },
+            {
+                id: 200,
+                module: "Ethics & Code of Conduct",
+                question: "In summary, what is the overarching ethos expected of a certified Mutual Fund Distributor in India?",
+                options: [
+                    "Maximizing personal trail commissions above client interests",
+                    "Serving as a trusted financial fiduciary by placing the client's financial well-being and suitability first, with integrity, transparency, and regulatory compliance",
+                    "Guaranteeing double-digit equity returns",
+                    "Replacing bank fixed deposits with high-risk debt"
+                ],
+                answer: 1,
+                explanation: "Mutual fund distribution is a fiduciary calling requiring total integrity, objective suitability, full disclosure, and unwavering ethical conduct."
+            }
+        ];
 
         /* 
            ====================================================================
@@ -1142,14 +2824,14 @@ function doPost(e) {
         }
 
         function generateFresh50QuestionSet() {
-            // Shuffle the entire master bank
+            // Shuffle the entire master bank of 200 questions
             const shuffledBank = fisherYatesShuffle(MASTER_QUESTION_BANK);
             
             // Pick 50 questions
             const selected = shuffledBank.slice(0, 50);
 
-            // Deep clone and shuffle option choices for each question so even duplicate questions feel new
-            return selected.map((q, idx) => {
+            // Deep clone and shuffle option choices for each question
+            return selected.map((q) => {
                 const originalOptions = [...q.options];
                 const correctAnswerText = originalOptions[q.answer];
                 const shuffledOpts = fisherYatesShuffle(originalOptions);
@@ -1184,7 +2866,7 @@ function doPost(e) {
                 return;
             }
 
-            // Generate FRESH 50 QUESTIONS
+            // Generate FRESH 50 QUESTIONS from the 200 pool
             const dynamicQuestions = generateFresh50QuestionSet();
 
             currentSession = {
